@@ -6,7 +6,7 @@ import rang.*;
 import tSoftware.*;
 
 class Task2 {
-	// метод считает суммарноую ЗП в группе
+	// метод считает суммарную ЗП в группе
 	static int totalSalaryEmployeesInGroup(WorkGroup wg) {
 		int total = 0;
 		for(Employee emp: wg.getEmpList()) {
@@ -14,7 +14,7 @@ class Task2 {
 		}
 		return total;
 	}
-	// метод считает суммарноую ЗП в фирме
+	// метод считает суммарную ЗП в фирме
 	static int totalSalaryEmployees(ArrayList<WorkGroup> wgList) {
 		int total = 0;
 		for(WorkGroup wg: wgList) {
