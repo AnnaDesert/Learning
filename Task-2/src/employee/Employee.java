@@ -2,9 +2,13 @@ package employee;
 
 import rang.*;
 
+// класс работник
 public class Employee {
+	// имя
 	private String name;
+	// должность
 	private Rang r;
+	// ЗП
 	private int salary;
 
 	public Employee(String n, Rang r, int s) {

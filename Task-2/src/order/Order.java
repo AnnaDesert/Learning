@@ -2,10 +2,15 @@ package order;
 
 import tSoftware.*;
 
+// класс заказов
 public class Order {
+	// имя заказа
 	private String nameOrder;
+	// тип заказа
 	private tSoftware tSoft;
+	// цена заказа
 	private int price;
+	// срок выполнения заказа
 	private int dueDate;
 
 	public Order(String nO, tSoftware tS, int p, int dDate) {

@@ -4,10 +4,15 @@ import java.util.*;
 import employee.*;
 import order.*;
 
+// класс рабочей группы
 public class WorkGroup {
+	// имя группы
 	private String groupName;
+	// список сотрудников группы
 	private ArrayList<Employee> empList = new ArrayList<Employee>();
+	// текущий заказ
 	private Order groupOrder = null;
+	// занята ли группа
 	private boolean busyness = false;
 
 	public WorkGroup(ArrayList<Employee> empL, String gName) {

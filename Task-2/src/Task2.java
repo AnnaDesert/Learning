@@ -6,6 +6,7 @@ import rang.*;
 import tSoftware.*;
 
 class Task2 {
+	// метод считает суммарноую ЗП в группе
 	static int totalSalaryEmployeesInGroup(WorkGroup wg) {
 		int total = 0;
 		for(Employee emp: wg.getEmpList()) {
@@ -13,6 +14,7 @@ class Task2 {
 		}
 		return total;
 	}
+	// метод считает суммарноую ЗП в фирме
 	static int totalSalaryEmployees(ArrayList<WorkGroup> wgList) {
 		int total = 0;
 		for(WorkGroup wg: wgList) {
@@ -22,6 +24,7 @@ class Task2 {
 	}
 	
 	public static void main(String[] args) {
+		// набор сотрудников №1
 		Employee emp11 = new Employee("Emp11", Rang.Head, 200000);
 		Employee emp12 = new Employee("Emp12", Rang.Senior, 180000);
 		Employee emp13 = new Employee("Emp13", Rang.Middle, 150000);
@@ -30,6 +33,7 @@ class Task2 {
 		Employee emp16 = new Employee("Emp16", Rang.Analyst, 90000);
 		Employee emp17 = new Employee("Emp17", Rang.Analyst, 90000);
 
+		// набор сотрудников №2
 		Employee emp21 = new Employee("Emp21", Rang.Head, 200000);
 		Employee emp22 = new Employee("Emp22", Rang.Senior, 180000);
 		Employee emp23 = new Employee("Emp23", Rang.Middle, 150000);
@@ -38,6 +42,7 @@ class Task2 {
 		Employee emp26 = new Employee("Emp26", Rang.Analyst, 90000);
 		Employee emp27 = new Employee("Emp27", Rang.Analyst, 90000);
 		
+		// набор сотрудников №3
 		Employee emp31 = new Employee("Emp31", Rang.Head, 200000);
 		Employee emp32 = new Employee("Emp32", Rang.Senior, 180000);
 		Employee emp33 = new Employee("Emp33", Rang.Middle, 150000);
@@ -46,6 +51,7 @@ class Task2 {
 		Employee emp36 = new Employee("Emp36", Rang.Analyst, 90000);
 		Employee emp37 = new Employee("Emp37", Rang.Analyst, 90000);
 
+		// формируем заказы
 		Order ord1 = new Order("Ord1", tSoftware.Mobile, 100000, 30);
 		Order ord2 = new Order("Ord2", tSoftware.Desktop, 120000, 50);
 
@@ -76,10 +82,12 @@ class Task2 {
 		empList3.add(emp36);
 		empList3.add(emp37);
 
+		// формируем группы
 		WorkGroup wg1 = new WorkGroup(empList1, "wg1");
 		WorkGroup wg2 = new WorkGroup(empList1, "wg2");
 		WorkGroup wg3 = new WorkGroup(empList1, "wg3");
 
+		// даем заказы
 		wg1.setOrder(ord1);
 		wg2.setOrder(ord2);
 
