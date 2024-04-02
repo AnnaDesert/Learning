@@ -1,62 +1,77 @@
-package workGroup;
+package workgroup;
 
-import java.util.*;
-import employee.*;
-import order.*;
+import java.util.ArrayList;
+import java.util.List;
 
-// класс рабочей группы
+import employee.Employee;
+import order.Order;
+
+/**
+ * Класс рабочая группа
+ * @author Максим Ведеников
+ */
 public class WorkGroup {
-	// имя группы
+	/** Имя группы */
 	private String groupName;
-	// список сотрудников группы
-	private ArrayList<Employee> empList = new ArrayList<Employee>();
-	// текущий заказ
-	private Order groupOrder = null;
-	// занята ли группа
-	private boolean busyness = false;
+	/** Список сотрудников группы */
+	private List<Employee> empList = new ArrayList<>();
+	/** Текущий заказ */
+	private Order order = null;
 
-	public WorkGroup(ArrayList<Employee> empL, String gName) {
+	/** 
+	 * Конструктор с 3-мя аргументами
+	 * @param  empL -- список сотрудников
+	 * @param  gName -- название рабочей группы
+	 * @param  order -- заказ
+	 */
+	public WorkGroup(List<Employee> empL, String gName, Order order) {
+		this(empL, gName);
+		this.order = order;
+	}
+	/** 
+	 * Конструктор с 2-мя аргументами
+	 * @param  empL -- список сотрудников
+	 * @param  gName -- название рабочей группы
+	 */
+	public WorkGroup(List<Employee> empL, String gName) {
 		groupName = gName;
 		for(Employee emp: empL) {
 			empList.add(emp);
 		}
 	}
+	/** Конструктор без аргументов */
+	public WorkGroup() {};
 
-	public void addEmployee(Employee emp) {
-		empList.add(emp);
-	}
-	public void setOrder(Order ord) {
-		groupOrder = ord;
-		busyness = true;
-	}
-	public void remOrder(Order ord) {
-		groupOrder = null;
-		busyness = false;
-	}
+	/** set-методы */
+	public void setOrder(Order order) {this.order = order;}
+	public void setGroupName(String groupName) {this.groupName = groupName;}
+	public void setEmpList(List<Employee> empList) {this.empList = empList;}
 
-	public ArrayList<Employee> getEmpList() {
-		return empList;
-	}
-	public String getGroupName() {
-		return groupName;
-	}
-	public Order getOrder() {
-		return groupOrder;
-	}
+	/** get-методы */
+	public Order getOrder() {return order;}
+	public String getGroupName() {return groupName;}
+	public List<Employee> getEmpList() {return empList;}
 
-	public boolean isBusyness() {
-		return busyness;
-	}
+	/** 
+	 * Добовляет сотрудника в группу
+	 * @param emp -- содрудник
+	 */
+	public void addEmployee(Employee emp) {empList.add(emp);}
+	/** Удаляет у группы заказ */
+	public void remOrder() {order = null;}
+	/** Прверяет есть ли у группы заказ  */
+	public boolean isBusyness() {return order == null;}
 
+	/** Вывод */
 	public String toString() {
 		String str = "В группе \""+groupName+"\" состоят:\n";
 		for(Employee emp: empList) {
 			str += emp.getName()+"\n";
 		}
-		if(busyness) {
-			str += "На данный момент группа занята";
-		} else {
+		if(isBusyness()) {
 			str += "На данный момент группа незанята";
+		} else {
+			str += "На данный момент группа занята проектом '"+order.getNameOrder()+"'";
 		}
 
 		return str;
