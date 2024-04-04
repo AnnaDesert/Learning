@@ -1,12 +1,13 @@
-package employee;
+package model.employee;
 
-import rang.Rang;
+import model.enums.Rang;
+import interfaces.iemployee.IEmployee;
 
 /**
  * Класс сотрудник
  * @author Максим Ведеников
  */
-public class Employee {
+public abstract class Employee implements IEmployee {
 	/** Имя сотрудника */
 	private String name;
 	/** Должность сотрудника */

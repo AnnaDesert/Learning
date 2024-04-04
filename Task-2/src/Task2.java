@@ -1,13 +1,15 @@
 import java.util.ArrayList;
 import java.util.List;
 
-import employee.Employee;
-import order.Order;
+import interfaces.iemployee.IEmployee;
+import interfaces.iorder.IOrder;
 import workgroup.WorkGroup;
-import rang.Rang;
-import typesoftware.TypeSoftware;
-import employee.employeefactory.EmployeeFactory;
-import order.orderfactory.OrderFactory;
+import model.enums.Rang;
+import model.enums.TypeSoftware;
+import interfaces.iemployee.IEmployeeFactory;
+import interfaces.iorder.IOrderFactory;
+import model.employee.EmployeeFactory;
+import model.order.OrderFactory;
 
 /**
  * Класс для задания №2
@@ -17,41 +19,41 @@ import order.orderfactory.OrderFactory;
 class Task2 {
 	public static void main(String[] args) {
 		/** Набор сотрудников №1 */
-		EmployeeFactory employeeFactory = new EmployeeFactory();
-		Employee hEmp11 = employeeFactory.createEmployee(Rang.Head,    "hEmp11");
-		Employee sEmp12 = employeeFactory.createEmployee(Rang.Senior,  "sEmp12");
-		Employee mEmp13 = employeeFactory.createEmployee(Rang.Middle,  "mEmp13");
-		Employee jEmp14 = employeeFactory.createEmployee(Rang.Junior,  "jEmp14");
-		Employee jEmp15 = employeeFactory.createEmployee(Rang.Junior,  "jEmp15");
-		Employee aEmp16 = employeeFactory.createEmployee(Rang.Analyst, "aEmp16", 200000);
-		Employee aEmp17 = employeeFactory.createEmployee(Rang.Analyst, "aEmp17");
+		IEmployeeFactory employeeFactory = new EmployeeFactory();
+		IEmployee hEmp11 = employeeFactory.createEmployee(Rang.Head,    "hEmp11");
+		IEmployee sEmp12 = employeeFactory.createEmployee(Rang.Senior,  "sEmp12");
+		IEmployee mEmp13 = employeeFactory.createEmployee(Rang.Middle,  "mEmp13");
+		IEmployee jEmp14 = employeeFactory.createEmployee(Rang.Junior,  "jEmp14");
+		IEmployee jEmp15 = employeeFactory.createEmployee(Rang.Junior,  "jEmp15");
+		IEmployee aEmp16 = employeeFactory.createEmployee(Rang.Analyst, "aEmp16", 200000);
+		IEmployee aEmp17 = employeeFactory.createEmployee(Rang.Analyst, "aEmp17");
 
 		/** Набор сотрудников №2 */
-		Employee hEmp21 = employeeFactory.createEmployee(Rang.Head,    "hEmp21");
-		Employee sEmp22 = employeeFactory.createEmployee(Rang.Senior,  "sEmp22");
-		Employee mEmp23 = employeeFactory.createEmployee(Rang.Middle,  "mEmp23");
-		Employee jEmp24 = employeeFactory.createEmployee(Rang.Junior,  "jEmp24");
-		Employee jEmp25 = employeeFactory.createEmployee(Rang.Junior,  "jEmp25");
-		Employee aEmp26 = employeeFactory.createEmployee(Rang.Analyst, "aEmp26");
-		Employee aEmp27 = employeeFactory.createEmployee(Rang.Analyst, "aEmp27");
+		IEmployee hEmp21 = employeeFactory.createEmployee(Rang.Head,    "hEmp21");
+		IEmployee sEmp22 = employeeFactory.createEmployee(Rang.Senior,  "sEmp22");
+		IEmployee mEmp23 = employeeFactory.createEmployee(Rang.Middle,  "mEmp23");
+		IEmployee jEmp24 = employeeFactory.createEmployee(Rang.Junior,  "jEmp24");
+		IEmployee jEmp25 = employeeFactory.createEmployee(Rang.Junior,  "jEmp25");
+		IEmployee aEmp26 = employeeFactory.createEmployee(Rang.Analyst, "aEmp26");
+		IEmployee aEmp27 = employeeFactory.createEmployee(Rang.Analyst, "aEmp27");
 
 		/** Набор сотрудников №3 */
-		Employee hEmp31 = employeeFactory.createEmployee(Rang.Head,    "hEmp31");
-		Employee sEmp32 = employeeFactory.createEmployee(Rang.Senior,  "sEmp32");
-		Employee mEmp33 = employeeFactory.createEmployee(Rang.Middle,  "mEmp33");
-		Employee jEmp34 = employeeFactory.createEmployee(Rang.Junior,  "jEmp34");
-		Employee jEmp35 = employeeFactory.createEmployee(Rang.Junior,  "jEmp35");
-		Employee aEmp36 = employeeFactory.createEmployee(Rang.Analyst, "aEmp36");
-		Employee aEmp37 = employeeFactory.createEmployee(Rang.Analyst, "aEmp37");
+		IEmployee hEmp31 = employeeFactory.createEmployee(Rang.Head,    "hEmp31");
+		IEmployee sEmp32 = employeeFactory.createEmployee(Rang.Senior,  "sEmp32");
+		IEmployee mEmp33 = employeeFactory.createEmployee(Rang.Middle,  "mEmp33");
+		IEmployee jEmp34 = employeeFactory.createEmployee(Rang.Junior,  "jEmp34");
+		IEmployee jEmp35 = employeeFactory.createEmployee(Rang.Junior,  "jEmp35");
+		IEmployee aEmp36 = employeeFactory.createEmployee(Rang.Analyst, "aEmp36");
+		IEmployee aEmp37 = employeeFactory.createEmployee(Rang.Analyst, "aEmp37");
 
 		/** Формируем заказы */
-		OrderFactory orderFactory = new OrderFactory();
-		Order mOrd1 = orderFactory.createOrder(TypeSoftware.Mobile,  "mOrd1");
-		Order sOrd2 = orderFactory.createOrder(TypeSoftware.Service, "sOrd2");
-		Order dOrd3 = orderFactory.createOrder(TypeSoftware.Desktop, "dOrd3", 120000, 180);
-		Order wOrd4 = orderFactory.createOrder(TypeSoftware.Website, "wOrd4", 50000);
+		IOrderFactory orderFactory = new OrderFactory();
+		IOrder mOrd1 = orderFactory.createOrder(TypeSoftware.Mobile,  "mOrd1");
+		IOrder sOrd2 = orderFactory.createOrder(TypeSoftware.Service, "sOrd2");
+		IOrder dOrd3 = orderFactory.createOrder(TypeSoftware.Desktop, "dOrd3", 120000, 180);
+		IOrder wOrd4 = orderFactory.createOrder(TypeSoftware.Website, "wOrd4", 50000);
 
-		List<Employee> empList1 = new ArrayList<>();
+		List<IEmployee> empList1 = new ArrayList<>();
 		empList1.add(hEmp11);
 		empList1.add(sEmp12);
 		empList1.add(mEmp13);
@@ -60,7 +62,7 @@ class Task2 {
 		empList1.add(aEmp16);
 		empList1.add(aEmp17);
 
-		List<Employee> empList2 = new ArrayList<>();
+		List<IEmployee> empList2 = new ArrayList<>();
 		empList2.add(hEmp21);
 		empList2.add(sEmp22);
 		empList2.add(mEmp23);
@@ -69,7 +71,7 @@ class Task2 {
 		empList2.add(aEmp26);
 		empList2.add(aEmp27);
 
-		List<Employee> empList3 = new ArrayList<>();
+		List<IEmployee> empList3 = new ArrayList<>();
 		empList3.add(hEmp31);
 		empList3.add(sEmp32);
 		empList3.add(mEmp33);
@@ -101,7 +103,7 @@ class Task2 {
 	 */
 	static int totalSalaryEmployeesInGroup(WorkGroup wg) {
 		int total = 0;
-		for(Employee emp: wg.getEmpList()) {
+		for(IEmployee emp: wg.getEmpList()) {
 				total += emp.getSalary();
 		}
 		return total;

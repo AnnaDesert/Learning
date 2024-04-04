@@ -1,12 +1,13 @@
-package order;
+package model.order;
 
-import typesoftware.TypeSoftware;
+import model.enums.TypeSoftware;
+import interfaces.iorder.IOrder;
 
 /**
  * Класс заказа
  * @author Максим Ведеников
  */
-public class Order {
+public abstract class Order implements IOrder {
 	/** Имя заказа */
 	private String nameOrder;
 	/** Тип заказа */

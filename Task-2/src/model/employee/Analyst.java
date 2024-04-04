@@ -1,26 +1,26 @@
-package employee.senior;
+package model.employee;
 
-import rang.Rang;
-import employee.Employee;
+import model.enums.Rang;
+import model.employee.Employee;
 
 /**
- * Класс сотрудник должности Senior
+ * Класс сотрудник должности Analyst
  * @author Максим Ведеников
  */
-public class Senior extends Employee {
+public class Analyst extends Employee {
 	/** 
 	 * Конструктор с 2-мя аргументами
 	 * @param  name -- имя сотрудника
 	 * @param  salary -- ЗП сотрудника
 	 */
-	public Senior(String name, int salary) {
-		super(name, Rang.Senior, salary);
+	public Analyst(String name, int salary) {
+		super(name, Rang.Analyst, salary);
 	}
 	/** 
 	 * Конструктор с 1-ним аргументом
 	 * @param  name -- имя сотрудника
 	 */
-	public Senior(String name) {
-		this(name, Rang.Senior.getDefSalary());
+	public Analyst(String name) {
+		this(name, Rang.Analyst.getDefSalary());
 	}
 }

@@ -1,4 +1,4 @@
-package typesoftware;
+package model.enums;
 
 /**
  * Перечисление типов ПО 

@@ -1,17 +1,18 @@
-package order.orderfactory;
+package model.order;
 
-import typesoftware.TypeSoftware;
-import order.Order;
-import order.website.Website;
-import order.desktop.Desktop;
-import order.service.Service;
-import order.mobile.Mobile;
+import model.enums.TypeSoftware;
+import model.order.Website;
+import model.order.Desktop;
+import model.order.Service;
+import model.order.Mobile;
+import interfaces.iorder.IOrder;
+import interfaces.iorder.IOrderFactory;
 
 /**
  * Класс фабрика заказов
  * @author Максим Ведеников
  */
-public class OrderFactory {
+public class OrderFactory implements IOrderFactory{
 	/**
 	 * создает заказ
 	 * @param  typeSoftware -- тип заказа
@@ -20,8 +21,8 @@ public class OrderFactory {
 	 * @param  dueDate -- время на завершение заказа
 	 * @return возвращает заказ
 	 */
-	public Order createOrder(TypeSoftware typeSoftware, String name, int price, int dueDate) {
-		Order order = null;
+	public IOrder createOrder(TypeSoftware typeSoftware, String name, int price, int dueDate) {
+		IOrder order = null;
 
 		switch(typeSoftware) {
 			case Website:
@@ -47,8 +48,8 @@ public class OrderFactory {
 	 * @param  price -- цена заказа
 	 * @return возвращает заказ
 	 */
-	public Order createOrder(TypeSoftware typeSoftware, String name, int price) {
-		Order order = null;
+	public IOrder createOrder(TypeSoftware typeSoftware, String name, int price) {
+		IOrder order = null;
 
 		switch(typeSoftware) {
 			case Website:
@@ -73,8 +74,8 @@ public class OrderFactory {
 	 * @param  name -- имя заказа
 	 * @return возвращает заказ
 	 */
-	public Order createOrder(TypeSoftware typeSoftware, String name) {
-		Order order = null;
+	public IOrder createOrder(TypeSoftware typeSoftware, String name) {
+		IOrder order = null;
 
 		switch(typeSoftware) {
 			case Website:

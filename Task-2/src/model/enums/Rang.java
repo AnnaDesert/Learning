@@ -1,4 +1,4 @@
-package rang;
+package model.enums;
 
 /**
  * Перечисление должностей сотрудников

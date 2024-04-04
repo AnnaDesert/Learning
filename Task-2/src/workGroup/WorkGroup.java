@@ -3,8 +3,8 @@ package workgroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import employee.Employee;
-import order.Order;
+import interfaces.iemployee.IEmployee;
+import interfaces.iorder.IOrder;
 
 /**
  * Класс рабочая группа
@@ -14,9 +14,9 @@ public class WorkGroup {
 	/** Имя группы */
 	private String groupName;
 	/** Список сотрудников группы */
-	private List<Employee> empList = new ArrayList<>();
+	private List<IEmployee> empList = new ArrayList<>();
 	/** Текущий заказ */
-	private Order order = null;
+	private IOrder order = null;
 
 	/** 
 	 * Конструктор с 3-мя аргументами
@@ -24,7 +24,7 @@ public class WorkGroup {
 	 * @param  gName -- название рабочей группы
 	 * @param  order -- заказ
 	 */
-	public WorkGroup(List<Employee> empL, String gName, Order order) {
+	public WorkGroup(List<IEmployee> empL, String gName, IOrder order) {
 		this(empL, gName);
 		this.order = order;
 	}
@@ -33,9 +33,9 @@ public class WorkGroup {
 	 * @param  empL -- список сотрудников
 	 * @param  gName -- название рабочей группы
 	 */
-	public WorkGroup(List<Employee> empL, String gName) {
+	public WorkGroup(List<IEmployee> empL, String gName) {
 		groupName = gName;
-		for(Employee emp: empL) {
+		for(IEmployee emp: empL) {
 			empList.add(emp);
 		}
 	}
@@ -43,20 +43,20 @@ public class WorkGroup {
 	public WorkGroup() {};
 
 	/** set-методы */
-	public void setOrder(Order order) {this.order = order;}
+	public void setOrder(IOrder order) {this.order = order;}
 	public void setGroupName(String groupName) {this.groupName = groupName;}
-	public void setEmpList(List<Employee> empList) {this.empList = empList;}
+	public void setEmpList(List<IEmployee> empList) {this.empList = empList;}
 
 	/** get-методы */
-	public Order getOrder() {return order;}
+	public IOrder getOrder() {return order;}
 	public String getGroupName() {return groupName;}
-	public List<Employee> getEmpList() {return empList;}
+	public List<IEmployee> getEmpList() {return empList;}
 
 	/** 
 	 * Добовляет сотрудника в группу
 	 * @param emp -- содрудник
 	 */
-	public void addEmployee(Employee emp) {empList.add(emp);}
+	public void addEmployee(IEmployee emp) {empList.add(emp);}
 	/** Удаляет у группы заказ */
 	public void remOrder() {order = null;}
 	/** Прверяет есть ли у группы заказ  */
@@ -65,7 +65,7 @@ public class WorkGroup {
 	/** Вывод */
 	public String toString() {
 		String str = "В группе \""+groupName+"\" состоят:\n";
-		for(Employee emp: empList) {
+		for(IEmployee emp: empList) {
 			str += emp.getName()+"\n";
 		}
 		if(isBusyness()) {

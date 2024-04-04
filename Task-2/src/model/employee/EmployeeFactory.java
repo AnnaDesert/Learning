@@ -1,18 +1,19 @@
-package employee.employeefactory;
+package model.employee;
 
-import rang.Rang;
-import employee.Employee;
-import employee.analyst.Analyst;
-import employee.head.Head;
-import employee.middle.Middle;
-import employee.junior.Junior;
-import employee.senior.Senior;
+import model.enums.Rang;
+import model.employee.Head;
+import model.employee.Senior;
+import model.employee.Middle;
+import model.employee.Junior;
+import model.employee.Analyst;
+import interfaces.iemployee.IEmployeeFactory;
+import interfaces.iemployee.IEmployee;
 
 /**
  * Класс фабрика сотрудников
  * @author Максим Ведеников
  */
-public class EmployeeFactory {
+public class EmployeeFactory implements IEmployeeFactory {
 	/**
 	 * создает сотрудника
 	 * @param  rang -- должность сотрудника
@@ -20,8 +21,8 @@ public class EmployeeFactory {
 	 * @param  salary -- ЗП сотрудника
 	 * @return возвращает сотрудника
 	 */
-	public Employee createEmployee(Rang rang, String name, int salary) {
-		Employee employee = null;
+	public IEmployee createEmployee(Rang rang, String name, int salary) {
+		IEmployee employee = null;
 
 		switch(rang) {
 			case Head:
@@ -49,8 +50,8 @@ public class EmployeeFactory {
 	 * @param  name -- имя сотрудника
 	 * @return возвращает сотрудника
 	 */
-	public Employee createEmployee(Rang rang, String name) {
-		Employee employee = null;
+	public IEmployee createEmployee(Rang rang, String name) {
+		IEmployee employee = null;
 
 		switch(rang) {
 			case Head:

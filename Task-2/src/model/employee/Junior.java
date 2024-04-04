@@ -1,7 +1,7 @@
-package employee.junior;
+package model.employee;
 
-import rang.Rang;
-import employee.Employee;
+import model.enums.Rang;
+import model.employee.Employee;
 
 /**
  * Класс сотрудник должности Junior

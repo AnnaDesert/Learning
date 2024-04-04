@@ -1,35 +1,35 @@
-package order.mobile;
+package model.order;
 
-import typesoftware.TypeSoftware;
-import order.Order;
+import model.enums.TypeSoftware;
+import model.order.Order;
 
 /**
- * Класс заказа типа Mobile
+ * Класс заказа типа Service
  * @author Максим Ведеников
  */
-public class Mobile extends Order {
+public class Service extends Order {
 	/** 
 	 * Конструктор с 3-мя аргументами
 	 * @param  name -- имя заказа
 	 * @param  price -- цена заказа
 	 * @param  dueDate -- время на выполнение заказа
 	 */
-	public Mobile(String name, int price, int dueDate) {
-		super(name, TypeSoftware.Mobile, price, dueDate);
+	public Service(String name, int price, int dueDate) {
+		super(name, TypeSoftware.Service, price, dueDate);
 	}
 	/** 
 	 * Конструктор с 2-мя аргументами
 	 * @param  name -- имя заказа
 	 * @param  price -- цена заказа
 	 */
-	public Mobile(String name, int price) {
-		this(name, price, TypeSoftware.Mobile.getDefDueDate());
+	public Service(String name, int price) {
+		this(name, price, TypeSoftware.Service.getDefDueDate());
 	}
 	/** 
 	 * Конструктор с 1-ним аргументом
 	 * @param  name -- имя заказа
 	 */
-	public Mobile(String name) {
-		this(name, TypeSoftware.Mobile.getDefPrice());
+	public Service(String name) {
+		this(name, TypeSoftware.Service.getDefPrice());
 	}
 }
