@@ -1,18 +1,14 @@
 package model.order;
 
 import model.enums.TypeSoftware;
-import model.order.Website;
-import model.order.Desktop;
-import model.order.Service;
-import model.order.Mobile;
-import interfaces.iorder.IOrder;
-import interfaces.iorder.IOrderFactory;
+import interfaces.IOrder;
+import interfaces.AbstractFactory;
 
 /**
  * Класс фабрика заказов
  * @author Максим Ведеников
  */
-public class OrderFactory implements IOrderFactory{
+public class OrderFactory implements AbstractFactory {
 	/**
 	 * создает заказ
 	 * @param  typeSoftware -- тип заказа
@@ -21,77 +17,31 @@ public class OrderFactory implements IOrderFactory{
 	 * @param  dueDate -- время на завершение заказа
 	 * @return возвращает заказ
 	 */
-	public IOrder createOrder(TypeSoftware typeSoftware, String name, int price, int dueDate) {
-		IOrder order = null;
-
+	public IOrder getOrder(TypeSoftware typeSoftware, String name, int price, int dueDate) {
 		switch(typeSoftware) {
-			case Website:
-				order = new Website(name, price, dueDate);
-				break;
-			case Desktop:
-				order = new Desktop(name, price, dueDate);
-				break;
-			case Service:
-				order = new Service(name, price, dueDate);
-				break;
-			case Mobile:
-				order = new Mobile(name, price, dueDate);
-				break;
+			case Website -> {return new Website(name, price, dueDate);}
+			case Desktop -> {return new Desktop(name, price, dueDate);}
+			case Service -> {return new Service(name, price, dueDate);}
+			case Mobile -> {return new Mobile(name, price, dueDate);}
 		}
-
-		return order;
-	}
-	/**
-	 * создает заказ
-	 * @param  typeSoftware -- тип заказа
-	 * @param  name -- имя заказа
-	 * @param  price -- цена заказа
-	 * @return возвращает заказ
-	 */
-	public IOrder createOrder(TypeSoftware typeSoftware, String name, int price) {
-		IOrder order = null;
-
+		return null;
+	} 
+	public IOrder getOrder(TypeSoftware typeSoftware, String name, int price) {
 		switch(typeSoftware) {
-			case Website:
-				order = new Website(name, price);
-				break;
-			case Desktop:
-				order = new Desktop(name, price);
-				break;
-			case Service:
-				order = new Service(name, price);
-				break;
-			case Mobile:
-				order = new Mobile(name, price);
-				break;
+			case Website -> {return new Website(name, price);}
+			case Desktop -> {return new Desktop(name, price);}
+			case Service -> {return new Service(name, price);}
+			case Mobile -> {return new Mobile(name, price);}
 		}
-
-		return order;
-	}
-	/**
-	 * создает заказ
-	 * @param  typeSoftware -- тип заказа
-	 * @param  name -- имя заказа
-	 * @return возвращает заказ
-	 */
-	public IOrder createOrder(TypeSoftware typeSoftware, String name) {
-		IOrder order = null;
-
+		return null;
+	} 
+	public IOrder getOrder(TypeSoftware typeSoftware, String name) {
 		switch(typeSoftware) {
-			case Website:
-				order = new Website(name);
-				break;
-			case Desktop:
-				order = new Desktop(name);
-				break;
-			case Service:
-				order = new Service(name);
-				break;
-			case Mobile:
-				order = new Mobile(name);
-				break;
+			case Website -> {return new Website(name);}
+			case Desktop -> {return new Desktop(name);}
+			case Service -> {return new Service(name);}
+			case Mobile -> {return new Mobile(name);}
 		}
-
-		return order;
+		return null;
 	}
 }

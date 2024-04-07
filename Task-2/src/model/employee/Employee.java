@@ -1,13 +1,12 @@
 package model.employee;
 
 import model.enums.Rang;
-import interfaces.iemployee.IEmployee;
 
 /**
  * Класс сотрудник
  * @author Максим Ведеников
  */
-public abstract class Employee implements IEmployee {
+public abstract class Employee {
 	/** Имя сотрудника */
 	private String name;
 	/** Должность сотрудника */
@@ -16,7 +15,7 @@ public abstract class Employee implements IEmployee {
 	private int salary;
 
 	/** 
-	 * Конструктор с 3-мя аргументами
+	 * Конструкторы
 	 * @param  n -- имя сотрудника
 	 * @param  r -- должность сотрудника
 	 * @param  s -- ЗП сотрудника
@@ -26,7 +25,6 @@ public abstract class Employee implements IEmployee {
 		this.r = r;
 		salary = s;
 	}
-	/** Конструктор без аргументов */
 	public Employee() {};
 
 	/** get-методы */

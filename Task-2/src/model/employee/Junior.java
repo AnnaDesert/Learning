@@ -1,25 +1,21 @@
 package model.employee;
 
 import model.enums.Rang;
-import model.employee.Employee;
+import interfaces.IEmployee;
 
 /**
  * Класс сотрудник должности Junior
  * @author Максим Ведеников
  */
-public class Junior extends Employee {
+public class Junior extends Employee implements IEmployee {
 	/** 
-	 * Конструктор с 2-мя аргументами
+	 * Конструкторы
 	 * @param  name -- имя сотрудника
 	 * @param  salary -- ЗП сотрудника
 	 */
 	public Junior(String name, int salary) {
 		super(name, Rang.Junior, salary);
 	}
-	/** 
-	 * Конструктор с 1-ним аргументом
-	 * @param  name -- имя сотрудника
-	 */
 	public Junior(String name) {
 		this(name, Rang.Junior.getDefSalary());
 	}

@@ -1,13 +1,12 @@
 package model.order;
 
 import model.enums.TypeSoftware;
-import interfaces.iorder.IOrder;
 
 /**
  * Класс заказа
  * @author Максим Ведеников
  */
-public abstract class Order implements IOrder {
+public abstract class Order {
 	/** Имя заказа */
 	private String nameOrder;
 	/** Тип заказа */
@@ -18,7 +17,7 @@ public abstract class Order implements IOrder {
 	private int dueDate;
 
 	/** 
-	 * Конструктор с 4-мя аргументами
+	 * Конструкторы
 	 * @param  nO -- имя заказа
 	 * @param  tS -- тип заказа
 	 * @param  p -- цена заказа
@@ -30,7 +29,6 @@ public abstract class Order implements IOrder {
 		price = p;
 		dueDate = dDate;
 	}
-	/** Конструктор без аргументов */
 	public Order() {};
 
 	/** get-методы */

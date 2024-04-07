@@ -3,8 +3,8 @@ package workgroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import interfaces.iemployee.IEmployee;
-import interfaces.iorder.IOrder;
+import interfaces.IEmployee;
+import interfaces.IOrder;
 
 /**
  * Класс рабочая группа
@@ -19,7 +19,7 @@ public class WorkGroup {
 	private IOrder order = null;
 
 	/** 
-	 * Конструктор с 3-мя аргументами
+	 * Конструкторы
 	 * @param  empL -- список сотрудников
 	 * @param  gName -- название рабочей группы
 	 * @param  order -- заказ
@@ -28,18 +28,12 @@ public class WorkGroup {
 		this(empL, gName);
 		this.order = order;
 	}
-	/** 
-	 * Конструктор с 2-мя аргументами
-	 * @param  empL -- список сотрудников
-	 * @param  gName -- название рабочей группы
-	 */
 	public WorkGroup(List<IEmployee> empL, String gName) {
 		groupName = gName;
 		for(IEmployee emp: empL) {
 			empList.add(emp);
 		}
 	}
-	/** Конструктор без аргументов */
 	public WorkGroup() {};
 
 	/** set-методы */

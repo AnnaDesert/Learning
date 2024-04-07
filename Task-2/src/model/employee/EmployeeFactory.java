@@ -1,19 +1,14 @@
 package model.employee;
 
 import model.enums.Rang;
-import model.employee.Head;
-import model.employee.Senior;
-import model.employee.Middle;
-import model.employee.Junior;
-import model.employee.Analyst;
-import interfaces.iemployee.IEmployeeFactory;
-import interfaces.iemployee.IEmployee;
+import interfaces.IEmployee;
+import interfaces.AbstractFactory;
 
 /**
  * Класс фабрика сотрудников
  * @author Максим Ведеников
  */
-public class EmployeeFactory implements IEmployeeFactory {
+public class EmployeeFactory implements AbstractFactory {
 	/**
 	 * создает сотрудника
 	 * @param  rang -- должность сотрудника
@@ -21,56 +16,24 @@ public class EmployeeFactory implements IEmployeeFactory {
 	 * @param  salary -- ЗП сотрудника
 	 * @return возвращает сотрудника
 	 */
-	public IEmployee createEmployee(Rang rang, String name, int salary) {
-		IEmployee employee = null;
-
+	public IEmployee getEmployee(Rang rang, String name, int salary) {
 		switch(rang) {
-			case Head:
-				employee = new Head(name, salary);
-				break;
-			case Senior:
-				employee = new Senior(name, salary);
-				break;
-			case Middle:
-				employee = new Middle(name, salary);
-				break;
-			case Junior:
-				employee = new Junior(name, salary);
-				break;
-			case Analyst:
-				employee = new Analyst(name, salary);
-				break;
+			case Head -> {return new Head(name, salary);}
+			case Senior -> {return new Senior(name, salary);}
+			case Middle -> {return new Middle(name, salary);}
+			case Junior -> {return new Junior(name, salary);}
+			case Analyst -> {return new Analyst(name, salary);}
 		}
-
-		return employee;
+		return null;
 	}
-	/**
-	 * создает сотрудника
-	 * @param  rang -- должность сотрудника
-	 * @param  name -- имя сотрудника
-	 * @return возвращает сотрудника
-	 */
-	public IEmployee createEmployee(Rang rang, String name) {
-		IEmployee employee = null;
-
+	public IEmployee getEmployee(Rang rang, String name) {
 		switch(rang) {
-			case Head:
-				employee = new Head(name);
-				break;
-			case Senior:
-				employee = new Senior(name);
-				break;
-			case Middle:
-				employee = new Middle(name);
-				break;
-			case Junior:
-				employee = new Junior(name);
-				break;
-			case Analyst:
-				employee = new Analyst(name);
-				break;
+			case Head -> {return new Head(name);}
+			case Senior -> {return new Senior(name);}
+			case Middle -> {return new Middle(name);}
+			case Junior -> {return new Junior(name);}
+			case Analyst -> {return new Analyst(name);}
 		}
-
-		return employee;
+		return null;
 	}
 }
