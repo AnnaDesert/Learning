@@ -1,13 +1,13 @@
-package enums;
+package model.enums;
 
 /**
  * Перечисление статусов заказа
  * @author Максим Ведеников
  */
 public enum EStatusOrder {
-    ATWORK("В работе"),
-    ONHOLD("В ожидании"),
-    COMPLETED("Завершен"),
+    IN_PROCESS("В работе"),
+    WAITING("В ожидании"),
+    SUCCESS("Завершен"),
     CANCELLED("Отменен");
 
     /** Русское описание */

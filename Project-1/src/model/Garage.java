@@ -5,10 +5,10 @@ package model;
  * @author Максим Ведеников
  */
 public class Garage {
-    /** Адрес гаража */
-    private String adress;
     /** ID гаража */
     private long id;
+    /** Адрес гаража */
+    private String adress;
 
     public String getAdress() {return adress;}
     public long getId() {return id;}

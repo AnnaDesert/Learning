@@ -1,29 +1,12 @@
 package service;
 
 import model.Garage;
-import repository.GarageServiceRepository;
 
 import java.util.List;
 
-/**
- * Класс сервис для гаражей
- * @author Максим Ведеников
- */
-public class GarageService {
-    /** Добавить гараж */
-    public void addGarage(Garage garage) {
-        GarageServiceRepository.getGarageServiceRepository().setGarage(garage);
-    }
-    /** Уадлить гараж */
-    public void removeGarage(Garage garage) {
-        GarageServiceRepository.getGarageServiceRepository().removeGarage(garage);
-    }
-    /** Получить гараж */
-    public Garage getGarage(Garage garage) {
-        return GarageServiceRepository.getGarageServiceRepository().getGarage(garage);
-    }
-    /** Получить все гаражи */
-    public List<Garage> getAllGarage() {
-        return GarageServiceRepository.getGarageServiceRepository().getListGarage();
-    }
+public interface GarageService extends CrudService<Long, Garage> {
+    void saveAll(List<Garage> garage);
+    void remove(Long id);
+    Garage get(Long id);
+    List<Garage> getAll();
 }

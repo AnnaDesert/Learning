@@ -5,22 +5,22 @@ package model;
  * @author Максим Ведеников
 */
 public class Master {
-    /** Имя мастера */
-    private String name;
     /** ID мастера */
     private long id;
+    /** Имя мастера */
+    private String name;
     /** ЗП мастера */
-    private int salary;
+    private long salary;
 
     /** set-методы */
     public void setName(String name) {this.name = name;}
     public void setId(long id) {this.id = id;}
-    public void setSalary(int salary) {this.salary = salary;}
+    public void setSalary(long salary) {this.salary = salary;}
 
     /** get-методы */
     public String getName() {return name;}
     public long getId() {return id;}
-    public int getSalary() {return salary;}
+    public long getSalary() {return salary;}
 
     /** Вывод */
     public String toString() {
