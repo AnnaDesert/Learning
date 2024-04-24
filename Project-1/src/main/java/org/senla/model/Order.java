@@ -1,6 +1,8 @@
 package org.senla.model;
 
 import org.senla.model.enums.EStatusOrder;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
@@ -8,6 +10,9 @@ import java.time.LocalDateTime;
  * Класс-сущность заказа
  * @author Максим Ведеников
  */
+
+@Component
+@Scope("prototype")
 public class Order {
     /** ID заказа */
     private long id;

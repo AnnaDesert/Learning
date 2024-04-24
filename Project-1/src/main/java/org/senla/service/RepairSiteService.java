@@ -1,6 +1,5 @@
 package org.senla.service;
 
-import org.senla.exception.NotFoundException;
 import org.senla.model.RepairSite;
 
 import java.util.List;
@@ -13,9 +12,9 @@ public interface RepairSiteService {
     /** Сохранить ремонтные площадки */
     void saveAll(List<RepairSite> repairSite);
     /** Удалить ремонтную площадку */
-    void remove(long id) throws NotFoundException;
+    void remove(long id);
     /** Получить ремонтную площадку */
-    RepairSite get(long id) throws NotFoundException;
+    RepairSite get(long id);
     /** Получить ремонтные площадки */
     List<RepairSite> getAll();
 }

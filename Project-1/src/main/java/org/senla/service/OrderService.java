@@ -1,6 +1,5 @@
 package org.senla.service;
 
-import org.senla.exception.NotFoundException;
 import org.senla.model.Order;
 import org.senla.model.enums.EStatusOrder;
 
@@ -15,13 +14,13 @@ public interface OrderService {
     /** Сохранить заказы */
     void saveAll(List<Order> entities);
     /** Удалить заказ */
-    void remove(long id) throws NotFoundException;
+    void remove(long id);
     /** Получить заказ */
-    Order get(long id) throws NotFoundException;
+    Order get(long id);
     /** Получить заказы */
     List<Order> getAll();
     /** Обновить статус заказа */
-    void updateStatus(long id, EStatusOrder statusOrder) throws NotFoundException;
+    void updateStatus(long id, EStatusOrder statusOrder);
     /** Обновить крайний срок заказа */
-    void updateDeadLine(long id, LocalDateTime date) throws NotFoundException;
+    void updateDeadLine(long id, LocalDateTime date);
 }

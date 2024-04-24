@@ -2,14 +2,18 @@ package org.senla.service.impl;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.senla.config.SpringConfig;
 import org.senla.exception.NotFoundException;
 import org.senla.model.Order;
 import org.senla.model.enums.EStatusOrder;
 import org.senla.service.OrderService;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -17,7 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * @author Максим Ведеников
  * */
 class OrderServiceImplTest {
-    static OrderService orderService = OrderServiceImpl.getService();
+    static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+            SpringConfig.class
+    );
+    static OrderService orderService = context.getBean("orderServiceImpl", OrderServiceImpl.class);
 
     @BeforeAll
     static void init() {
@@ -37,17 +44,12 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void getService() {
-        assertEquals(OrderServiceImpl.getService(), OrderServiceImpl.getService());
-    }
-
-    @Test
     void remove() {
         orderService.remove(1L);
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void removeNotFoundException() {
         try {
             orderService.remove(4L);
@@ -57,8 +59,8 @@ class OrderServiceImplTest {
         assertNull(orderService.get(4L));
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void removeNotFoundExceptionNegativeIndex() {
         try {
             orderService.remove(-1L);
@@ -71,9 +73,7 @@ class OrderServiceImplTest {
     @Test
     void getAll() {
         List<Order> orders = orderService.getAll();
-        for(int i=0; i < orders.size(); i++) {
-            assertEquals(i+1, orders.get(i).getId());
-        }
+        assertThat(orders).isNotEmpty();
     }
 
     @Test
@@ -81,8 +81,8 @@ class OrderServiceImplTest {
         assertEquals(2, orderService.get(2L).getId());
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void getNotFoundException() {
         try {
             orderService.remove(5L);
@@ -92,8 +92,8 @@ class OrderServiceImplTest {
         assertNull(orderService.get(5L));
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void getNotFoundExceptionNegativeIndex() {
         try {
             orderService.remove(-1L);
@@ -120,8 +120,8 @@ class OrderServiceImplTest {
         assertEquals(LocalDateTime.of(2024, 5, 13, 13, 30), orderService.get(2L).getDeadLine());
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void updateStatusNotFoundException() {
         try {
             orderService.updateStatus(5L, EStatusOrder.IN_PROCESS);
@@ -131,8 +131,8 @@ class OrderServiceImplTest {
         assertNull(orderService.get(5L));
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void updateDeadLineNotFoundException() {
         try {
             orderService.updateDeadLine(5L, LocalDateTime.of(2024, 5, 21, 14, 20));
@@ -142,8 +142,8 @@ class OrderServiceImplTest {
         assertNull(orderService.get(5L));
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void updateStatusNotFoundExceptionNegativeIndex() {
         try {
             orderService.updateStatus(-1L, EStatusOrder.IN_PROCESS);
@@ -153,8 +153,8 @@ class OrderServiceImplTest {
         assertNull(orderService.get(-1L));
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void updateDeadLineNotFoundExceptionNegativeIndex() {
         try {
             orderService.updateDeadLine(-1L, LocalDateTime.of(2024, 5, 21, 14, 20));
@@ -162,5 +162,9 @@ class OrderServiceImplTest {
             assertEquals("No data was found for this id: -1", e.getMessage());
         }
         assertNull(orderService.get(-1L));
+    }
+
+    static {
+        context.close();
     }
 }

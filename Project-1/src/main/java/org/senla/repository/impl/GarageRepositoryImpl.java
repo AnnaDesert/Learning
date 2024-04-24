@@ -3,6 +3,7 @@ package org.senla.repository.impl;
 import org.senla.model.Garage;
 import org.senla.exception.NotFoundException;
 import org.senla.repository.GarageRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,26 +14,18 @@ import java.util.Map;
  * Класс репозитрий для гаражей [Singleton]
  * @author Максим Ведеников
  */
+
+@Component
 public class GarageRepositoryImpl implements GarageRepository {
     /** Счетчик ID */
     private static long ID = 0;
-    private static GarageRepository garageRepository;
     /** Список гаражей */
     private static Map<Long, Garage> listGarage = new HashMap<>();
 
     private GarageRepositoryImpl() {};
 
-    /** Получить обьект GarageRepositoryImpl */
-    public static synchronized GarageRepository getRepository() {
-        if(garageRepository == null) {
-            garageRepository = new GarageRepositoryImpl();
-        }
-        return garageRepository;
-    }
-
-
     /** Уадлить гараж */
-    public void remove(Long id) throws NotFoundException {
+    public void remove(Long id) {
         if(id > ID || id <= 0) {
             throw new NotFoundException("No data was found for this id");
         }
@@ -44,7 +37,7 @@ public class GarageRepositoryImpl implements GarageRepository {
         return new ArrayList<>(listGarage.values());
     }
     /** Получить гараже */
-    public Garage get(Long id) throws NotFoundException {
+    public Garage get(Long id) {
         if(id > ID || id <= 0) {
             throw new NotFoundException("No data was found for this id: "+id);
         }

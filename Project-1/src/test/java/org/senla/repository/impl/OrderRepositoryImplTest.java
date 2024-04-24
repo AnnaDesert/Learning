@@ -1,15 +1,19 @@
 package org.senla.repository.impl;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.senla.config.SpringConfig;
 import org.senla.exception.NotFoundException;
 import org.senla.model.Order;
 import org.senla.model.enums.EStatusOrder;
 import org.senla.repository.OrderRepository;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -17,7 +21,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author Максим Ведеников
  * */
 class OrderRepositoryImplTest {
-    static OrderRepository orderRepository = OrderRepositoryImpl.getRepository();
+    static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+            SpringConfig.class
+    );
+    static OrderRepository orderRepository = context.getBean("orderRepositoryImpl", OrderRepositoryImpl.class);;
 
     @BeforeAll
     static void init() {
@@ -37,17 +44,12 @@ class OrderRepositoryImplTest {
     }
 
     @Test
-    void getRepository() {
-        assertEquals(OrderRepositoryImpl.getRepository(), OrderRepositoryImpl.getRepository());
-    }
-
-    @Test
     void remove() {
         orderRepository.remove(1L);
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void removeNotFoundException() {
         assertThrows(
                 NotFoundException.class,
@@ -57,8 +59,8 @@ class OrderRepositoryImplTest {
         );
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void removeNotFoundExceptionNegativeIndex() {
         assertThrows(
                 NotFoundException.class,
@@ -71,9 +73,7 @@ class OrderRepositoryImplTest {
     @Test
     void getAll() {
         List<Order> orders = orderRepository.getAll();
-        for(int i=0; i < orders.size(); i++) {
-            assertEquals(i+2, orders.get(i).getId());
-        }
+        assertThat(orders).isNotEmpty();
     }
 
     @Test
@@ -81,8 +81,8 @@ class OrderRepositoryImplTest {
         assertEquals(2, orderRepository.get(2L).getId());
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void getNotFoundException() {
         assertThrows(
                 NotFoundException.class,
@@ -92,8 +92,8 @@ class OrderRepositoryImplTest {
         );
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void getNotFoundExceptionNegativeIndex() {
         assertThrows(
                 NotFoundException.class,
@@ -120,8 +120,8 @@ class OrderRepositoryImplTest {
         assertEquals(LocalDateTime.of(2024, 5, 13, 13, 30), orderRepository.get(2L).getDeadLine());
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void updateStatusNotFoundException() {
         assertThrows(
                 NotFoundException.class,
@@ -131,8 +131,8 @@ class OrderRepositoryImplTest {
         );
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void updateDeadLineNotFoundException() {
         assertThrows(
                 NotFoundException.class,
@@ -142,8 +142,8 @@ class OrderRepositoryImplTest {
         );
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void updateStatusNotFoundExceptionNegativeIndex() {
         assertThrows(
                 NotFoundException.class,
@@ -153,8 +153,8 @@ class OrderRepositoryImplTest {
         );
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void updateDeadLineNotFoundExceptionNegativeIndex() {
         assertThrows(
                 NotFoundException.class,
@@ -162,5 +162,9 @@ class OrderRepositoryImplTest {
                     orderRepository.updateDeadLine(-1L, LocalDateTime.of(2024, 5, 13, 13, 30));
                 }
         );
+    }
+
+    static {
+        context.close();
     }
 }

@@ -3,6 +3,7 @@ package org.senla.repository.impl;
 import org.senla.model.Master;
 import org.senla.exception.NotFoundException;
 import org.senla.repository.MasterRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,25 +14,18 @@ import java.util.Map;
  * Класс репозитрий для мастера [Singleton]
  * @author Максим Ведеников
  */
+
+@Component
 public class MasterRepositoryImpl implements MasterRepository {
     /** Счетчик ID */
     private static long ID = 0;
-    private static MasterRepository masterRepository;
     /** Список мастеров */
     private static Map<Long, Master> listMaster = new HashMap<>();
 
     private MasterRepositoryImpl() {};
 
-    /** Получить обьект MasterServiceRepository */
-    public static synchronized MasterRepository getRepository() {
-        if(masterRepository == null) {
-            masterRepository = new MasterRepositoryImpl();
-        }
-        return masterRepository;
-    }
-
     /** Уадлить мастера */
-    public void remove(Long id) throws NotFoundException {
+    public void remove(Long id) {
         if(id > ID || id <= 0) {
             throw new NotFoundException("No data was found for this id");
         }
@@ -43,7 +37,7 @@ public class MasterRepositoryImpl implements MasterRepository {
         return new ArrayList<>(listMaster.values());
     }
     /** Получить мастера */
-    public Master get(Long id) throws NotFoundException {
+    public Master get(Long id) {
         if(id > ID || id <= 0) {
             throw new NotFoundException("No data was found for this id");
         }

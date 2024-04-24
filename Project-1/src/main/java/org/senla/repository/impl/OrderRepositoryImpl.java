@@ -4,6 +4,7 @@ import org.senla.model.Order;
 import org.senla.model.enums.EStatusOrder;
 import org.senla.exception.NotFoundException;
 import org.senla.repository.OrderRepository;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,25 +16,18 @@ import java.util.Map;
  * Класс репозитрий для заказов [Singleton]
  * @author Максим Ведеников
  */
+
+@Component
 public class OrderRepositoryImpl implements OrderRepository {
     /** Счетчик ID */
     private static long ID = 0;
-    private static OrderRepository orderRepository;
     /** Список заказов */
     private static Map<Long, Order> listOrder = new HashMap<>();
 
     private OrderRepositoryImpl() {};
 
-    /** Получить обьект OrderServiceRepository */
-    public static synchronized OrderRepository getRepository() {
-        if(orderRepository == null) {
-            orderRepository = new OrderRepositoryImpl();
-        }
-        return orderRepository;
-    }
-
     /** Обновить заказ */
-    public void updateStatus(Long id, EStatusOrder statusOrder) throws NotFoundException {
+    public void updateStatus(Long id, EStatusOrder statusOrder) {
         if(id > ID || id <= 0) {
             throw new NotFoundException("No data was found for this id");
         }
@@ -41,7 +35,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     /** Уадлить заказ */
-    public void remove(Long id) throws NotFoundException {
+    public void remove(Long id) {
         if(id > ID || id <= 0) {
             throw new NotFoundException("No data was found for this id");
         }
@@ -53,7 +47,7 @@ public class OrderRepositoryImpl implements OrderRepository {
         return new ArrayList<>(listOrder.values());
     }
     /** Получить заказ */
-    public Order get(Long id) throws NotFoundException {
+    public Order get(Long id) {
         if(id > ID || id <= 0) {
             throw new NotFoundException("No data was found for this id");
         }
@@ -68,7 +62,7 @@ public class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
-    public void updateDeadLine(long id, LocalDateTime date) throws NotFoundException {
+    public void updateDeadLine(long id, LocalDateTime date) {
         if(id > ID || id <= 0) {
             throw new NotFoundException("No data was found for this id");
         }

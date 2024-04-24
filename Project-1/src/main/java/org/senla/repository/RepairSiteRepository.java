@@ -1,7 +1,6 @@
 package org.senla.repository;
 
 import org.senla.model.RepairSite;
-import org.senla.exception.NotFoundException;
 
 import java.util.List;
 
@@ -11,11 +10,11 @@ import java.util.List;
  * */
 public interface RepairSiteRepository extends CrudRepository<Long, RepairSite> {
     /** Удалить ремонтную площадку */
-    void remove(Long id) throws NotFoundException;
+    void remove(Long id);
     /** Получить ремонтные площадки */
     List<RepairSite> getAll();
     /** Получить ремонтную площадку */
-    RepairSite get(Long id)  throws NotFoundException ;
+    RepairSite get(Long id);
     /** Сохранить ремонтные пложадки */
     void saveAll(List<RepairSite> garages);
 }

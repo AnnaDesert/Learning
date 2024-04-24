@@ -3,8 +3,9 @@ package org.senla.service.impl;
 import org.senla.model.RepairSite;
 import org.senla.exception.NotFoundException;
 import org.senla.repository.RepairSiteRepository;
-import org.senla.repository.impl.RepairSiteRepositoryImpl;
 import org.senla.service.RepairSiteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -12,26 +13,19 @@ import java.util.List;
  * Класс сервис для ремонтной площадки
  * @author Максим Ведеников
  */
-public class RepairSiteServiceImpl implements RepairSiteService {
-    private static RepairSiteService repairSiteServiceImpl;
-    private static RepairSiteRepository repairSiteRepository;
-    private RepairSiteServiceImpl() {};
 
-    /** Получить обьект RepairSiteServiceImpl */
-    public static synchronized RepairSiteService getService() {
-        if(repairSiteServiceImpl == null) {
-            repairSiteServiceImpl = new RepairSiteServiceImpl();
-            repairSiteRepository = RepairSiteRepositoryImpl.getRepository();
-        }
-        return repairSiteServiceImpl;
-    }
+@Component
+public class RepairSiteServiceImpl implements RepairSiteService {
+    @Autowired
+    private RepairSiteRepository repairSiteRepository;
+    private RepairSiteServiceImpl() {};
 
     /** Добавить ремонтную площадку */
     public void saveAll(List<RepairSite> repairSite) {
         repairSiteRepository.saveAll(repairSite);
     }
     /** Уадлить ремонтную площадку */
-    public void remove(long id) throws NotFoundException {
+    public void remove(long id) {
         try {
             repairSiteRepository.remove(id);
         } catch(NotFoundException e) {
@@ -39,7 +33,7 @@ public class RepairSiteServiceImpl implements RepairSiteService {
         }
     }
     /** Получить ремонтную площадку */
-    public RepairSite get(long id) throws NotFoundException {
+    public RepairSite get(long id) {
         try {
             return repairSiteRepository.get(id);
         } catch(NotFoundException e) {

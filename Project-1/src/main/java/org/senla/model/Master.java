@@ -1,9 +1,15 @@
 package org.senla.model;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 /**
  * Класс-сущность Мастера
  * @author Максим Ведеников
 */
+
+@Component
+@Scope("prototype")
 public class Master {
     /** ID мастера */
     private long id;

@@ -3,6 +3,7 @@ package org.senla.repository.impl;
 import org.senla.model.RepairSite;
 import org.senla.exception.NotFoundException;
 import org.senla.repository.RepairSiteRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,25 +14,18 @@ import java.util.Map;
  * Класс репозитрий для ремонтных площадок [Singleton]
  * @author Максим Ведеников
  */
+
+@Component
 public class RepairSiteRepositoryImpl implements RepairSiteRepository {
     /** Счетчик ID */
     private static long ID = 0;
-    private static RepairSiteRepository repairSiteRepository;
     /** Список ремонтных площадок */
     private static Map<Long, RepairSite> listRepairSite = new HashMap<>();
 
     private RepairSiteRepositoryImpl() {};
 
-    /** Получить обьект RepairSiteServiceRepository */
-    public static synchronized RepairSiteRepository getRepository() {
-        if(repairSiteRepository == null) {
-            repairSiteRepository = new RepairSiteRepositoryImpl();
-        }
-        return repairSiteRepository;
-    }
-
     /** Уадлить ремонтную станцию */
-    public void remove(Long id) throws NotFoundException {
+    public void remove(Long id) {
         if(id > ID || id <= 0) {
             throw new NotFoundException("No data was found for this id");
         }
@@ -43,7 +37,7 @@ public class RepairSiteRepositoryImpl implements RepairSiteRepository {
         return new ArrayList<>(listRepairSite.values());
     }
     /** Получить ремонтную станцию */
-    public RepairSite get(Long id) throws NotFoundException {
+    public RepairSite get(Long id) {
         if(id > ID || id <= 0) {
             throw new NotFoundException("No data was found for this id");
         }

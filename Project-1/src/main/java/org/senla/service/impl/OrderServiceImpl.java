@@ -4,32 +4,25 @@ import org.senla.model.enums.EStatusOrder;
 import org.senla.model.Order;
 import org.senla.exception.NotFoundException;
 import org.senla.repository.OrderRepository;
-import org.senla.repository.impl.OrderRepositoryImpl;
 import org.senla.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Component
 public class OrderServiceImpl implements OrderService {
-    private static OrderService orderServiceImpl;
-    private static OrderRepository orderRepository;
+    @Autowired
+    private OrderRepository orderRepository;
     private OrderServiceImpl() {};
-
-    /** Получить обьект OrderServiceImpl */
-    public static synchronized OrderService getService() {
-        if(orderServiceImpl == null) {
-            orderServiceImpl = new OrderServiceImpl();
-            orderRepository = OrderRepositoryImpl.getRepository();
-        }
-        return orderServiceImpl;
-    }
 
     /** Добавить заказ */
     public void saveAll(List<Order> order) {
         orderRepository.saveAll(order);
     }
     /** Уадлить заказ */
-    public void remove(long id) throws NotFoundException {
+    public void remove(long id) {
         try {
             orderRepository.remove(id);
         } catch(NotFoundException e) {
@@ -37,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
     /** Получить заказ */
-    public Order get(long id) throws NotFoundException {
+    public Order get(long id) {
         try {
             return orderRepository.get(id);
         } catch(NotFoundException e) {
@@ -51,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /** Обновить заказ */
-    public void updateStatus(long id, EStatusOrder statusOrder) throws NotFoundException {
+    public void updateStatus(long id, EStatusOrder statusOrder) {
         try {
             orderRepository.updateStatus(id, statusOrder);
         } catch(NotFoundException e) {
@@ -60,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /** Обновить дату */
-    public void updateDeadLine(long id, LocalDateTime date) throws NotFoundException {
+    public void updateDeadLine(long id, LocalDateTime date) {
         try {
             orderRepository.updateDeadLine(id, date);
         } catch(NotFoundException e) {

@@ -1,7 +1,5 @@
 package org.senla.repository;
 
-import org.senla.exception.NotFoundException;
-
 import java.util.List;
 
 /**
@@ -12,9 +10,9 @@ public interface CrudRepository<I, T> {
     /** Сохранить */
     void saveAll(List<T> entities);
     /** Удалить */
-    void remove(I id) throws NotFoundException;
+    void remove(I id);
     /** Получить всё */
     List<T> getAll();
     /** Получить */
-    T get(I id) throws NotFoundException;
+    T get(I id);
 }

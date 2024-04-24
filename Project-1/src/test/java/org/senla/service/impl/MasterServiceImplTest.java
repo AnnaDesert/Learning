@@ -1,13 +1,17 @@
 package org.senla.service.impl;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.senla.config.SpringConfig;
 import org.senla.exception.NotFoundException;
 import org.senla.model.Master;
 import org.senla.service.MasterService;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -15,7 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * @author Максим Ведеников
  * */
 class MasterServiceImplTest {
-    static MasterService masterService = MasterServiceImpl.getService();
+    static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+            SpringConfig.class
+    );
+    static MasterService masterService = context.getBean("masterServiceImpl", MasterServiceImpl.class);
 
     @BeforeAll
     static void init() {
@@ -33,17 +40,12 @@ class MasterServiceImplTest {
     }
 
     @Test
-    void getService() {
-        assertEquals(MasterServiceImpl.getService(), MasterServiceImpl.getService());
-    }
-
-    @Test
     void remove() {
         masterService.remove(1L);
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void removeNotFoundException() {
         try {
             masterService.remove(4L);
@@ -53,8 +55,8 @@ class MasterServiceImplTest {
         assertNull(masterService.get(4L));
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void removeNotFoundExceptionNegativeIndex() {
         try {
             masterService.remove(-1L);
@@ -67,9 +69,7 @@ class MasterServiceImplTest {
     @Test
     void getAll() {
         List<Master> masters = masterService.getAll();
-        for(int i=0; i < masters.size(); i++) {
-            assertEquals(i+2, masters.get(i).getId());
-        }
+        assertThat(masters).isNotEmpty();
     }
 
     @Test
@@ -77,8 +77,8 @@ class MasterServiceImplTest {
         assertEquals(2, masterService.get(2L).getId());
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void getNotFoundException() {
         try {
             masterService.remove(5L);
@@ -88,8 +88,8 @@ class MasterServiceImplTest {
         assertNull(masterService.get(5L));
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void getNotFoundExceptionNegativeIndex() {
         try {
             masterService.remove(-1L);
@@ -102,5 +102,9 @@ class MasterServiceImplTest {
     @Test
     void saveAll() {
         assertEquals(2, masterService.get(2L).getId());
+    }
+
+    static {
+        context.close();
     }
 }

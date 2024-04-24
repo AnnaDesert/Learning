@@ -3,8 +3,9 @@ package org.senla.service.impl;
 import org.senla.model.Master;
 import org.senla.exception.NotFoundException;
 import org.senla.repository.MasterRepository;
-import org.senla.repository.impl.MasterRepositoryImpl;
 import org.senla.service.MasterService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -12,26 +13,19 @@ import java.util.List;
  * Класс сервис для мастера
  * @author Максим Ведеников
  */
-public class MasterServiceImpl implements MasterService {
-    private static MasterService masterServiceImpl;
-    private static MasterRepository masterRepository;
-    private MasterServiceImpl() {};
 
-    /** Получить обьект MasterServiceImpl */
-    public static synchronized MasterService getService() {
-        if(masterServiceImpl == null) {
-            masterServiceImpl = new MasterServiceImpl();
-            masterRepository = MasterRepositoryImpl.getRepository();
-        }
-        return masterServiceImpl;
-    }
+@Component
+public class MasterServiceImpl implements MasterService {
+    @Autowired
+    private MasterRepository masterRepository;
+    private MasterServiceImpl() {};
     
     /** Добавить мастера */
     public void saveAll(List<Master> master) {
         masterRepository.saveAll(master);
     }
     /** Уадлить мастера */
-    public void remove(long id) throws NotFoundException {
+    public void remove(long id) {
         try {
             masterRepository.remove(id);
         } catch(NotFoundException e) {
@@ -39,7 +33,7 @@ public class MasterServiceImpl implements MasterService {
         }
     }
     /** Получить мастера */
-    public Master get(long id) throws NotFoundException {
+    public Master get(long id) {
         try {
             return masterRepository.get(id);
         } catch(NotFoundException e) {

@@ -1,7 +1,6 @@
 package org.senla.repository;
 
 import org.senla.model.Garage;
-import org.senla.exception.NotFoundException;
 
 import java.util.List;
 
@@ -11,11 +10,11 @@ import java.util.List;
  * */
 public interface GarageRepository extends CrudRepository<Long, Garage> {
     /** Удалить гаражи */
-    void remove(Long id) throws NotFoundException;
+    void remove(Long id);
     /** Получить гаражи */
     List<Garage> getAll();
     /** Получить гараж */
-    Garage get(Long id)  throws NotFoundException ;
+    Garage get(Long id);
     /** Сохранить гаражи */
     void saveAll(List<Garage> garages);
 }

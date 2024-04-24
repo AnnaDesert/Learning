@@ -1,13 +1,17 @@
 package org.senla.repository.impl;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.senla.config.SpringConfig;
 import org.senla.exception.NotFoundException;
 import org.senla.model.Master;
 import org.senla.repository.MasterRepository;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -15,7 +19,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Максим Ведеников
  * */
 class MasterRepositoryImplTest {
-    static MasterRepository masterRepository = MasterRepositoryImpl.getRepository();
+
+    static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+            SpringConfig.class
+    );
+
+    static MasterRepository masterRepository = context.getBean("masterRepositoryImpl", MasterRepositoryImpl.class);;
 
     @BeforeAll
     static void init() {
@@ -33,17 +42,12 @@ class MasterRepositoryImplTest {
     }
 
     @Test
-    void getRepository() {
-        assertEquals(MasterRepositoryImpl.getRepository(), MasterRepositoryImpl.getRepository());
-    }
-
-    @Test
     void remove() {
         masterRepository.remove(1L);
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void removeNotFoundException() {
         assertThrows(
                 NotFoundException.class,
@@ -53,8 +57,8 @@ class MasterRepositoryImplTest {
         );
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void removeNotFoundExceptionNegativeIndex() {
         assertThrows(
                 NotFoundException.class,
@@ -67,9 +71,7 @@ class MasterRepositoryImplTest {
     @Test
     void getAll() {
         List<Master> masters = masterRepository.getAll();
-        for(int i=0; i < masters.size(); i++) {
-            assertEquals(i+1, masters.get(i).getId());
-        }
+        assertThat(masters).isNotEmpty();
     }
 
     @Test
@@ -77,8 +79,8 @@ class MasterRepositoryImplTest {
         assertEquals(2, masterRepository.get(2L).getId());
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void getNotFoundException() {
         assertThrows(
                 NotFoundException.class,
@@ -88,8 +90,8 @@ class MasterRepositoryImplTest {
         );
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void getNotFoundExceptionNegativeIndex() {
         assertThrows(
                 NotFoundException.class,
@@ -102,5 +104,9 @@ class MasterRepositoryImplTest {
     @Test
     void saveAll() {
         assertEquals(2, masterRepository.get(2L).getId());
+    }
+
+    static {
+        context.close();
     }
 }

@@ -1,6 +1,5 @@
 package org.senla.service;
 
-import org.senla.exception.NotFoundException;
 import org.senla.model.Master;
 
 import java.util.List;
@@ -13,9 +12,9 @@ public interface MasterService {
     /** Сохранить мастеров */
     void saveAll(List<Master> master);
     /** Удалить мастера */
-    void remove(long id) throws NotFoundException;
+    void remove(long id);
     /** Получить мастера */
-    Master get(long id) throws NotFoundException;
+    Master get(long id);
     /** Получить мастеров */
     List<Master> getAll();
 }

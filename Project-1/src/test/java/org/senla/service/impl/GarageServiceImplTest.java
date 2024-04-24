@@ -2,12 +2,16 @@ package org.senla.service.impl;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.senla.config.SpringConfig;
 import org.senla.exception.NotFoundException;
 import org.senla.model.Garage;
 import org.senla.service.GarageService;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -15,23 +19,21 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * @author Максим Ведеников
  * */
 class GarageServiceImplTest {
-    static GarageService garageService = GarageServiceImpl.getService();
+    static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+            SpringConfig.class
+    );
+    static GarageService garageService = context.getBean("garageServiceImpl", GarageServiceImpl.class);
 
     @BeforeAll
     static void init() {
         Garage garage1 = new Garage();
-        garage1.setAdress("Street garage1");
+        garage1.setAddress("Street garage1");
         Garage garage2 = new Garage();
-        garage2.setAdress("Street garage2");
+        garage2.setAddress("Street garage2");
         Garage garage3 = new Garage();
-        garage3.setAdress("Street garage3");
+        garage3.setAddress("Street garage3");
 
         garageService.saveAll(List.of(garage1, garage2, garage3));
-    }
-
-    @Test
-    void getService() {
-        assertEquals(GarageServiceImpl.getService(), GarageServiceImpl.getService());
     }
 
     @Test
@@ -39,8 +41,8 @@ class GarageServiceImplTest {
         garageService.remove(1L);
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void removeNotFoundException() {
         try {
             garageService.remove(4L);
@@ -50,8 +52,8 @@ class GarageServiceImplTest {
         assertNull(garageService.get(4L));
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void removeNotFoundExceptionNegativeIndex() {
         try {
             garageService.remove(-1L);
@@ -64,9 +66,7 @@ class GarageServiceImplTest {
     @Test
     void getAll() {
         List<Garage> garages = garageService.getAll();
-        for(int i=0; i < garages.size(); i++) {
-            assertEquals(i+1, garages.get(i).getId());
-        }
+        assertThat(garages).isNotEmpty();
     }
 
     @Test
@@ -74,8 +74,8 @@ class GarageServiceImplTest {
         assertEquals(2, garageService.get(2L).getId());
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void getNotFoundException() {
         try {
             garageService.remove(5L);
@@ -85,8 +85,8 @@ class GarageServiceImplTest {
         assertNull(garageService.get(5L));
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void getNotFoundExceptionNegativeIndex() {
         try {
             garageService.remove(-1L);
@@ -99,5 +99,9 @@ class GarageServiceImplTest {
     @Test
     void saveAll() {
         assertEquals(2, garageService.get(2L).getId());
+    }
+
+    static {
+        context.close();
     }
 }

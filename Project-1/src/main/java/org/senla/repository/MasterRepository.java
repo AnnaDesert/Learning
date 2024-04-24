@@ -1,7 +1,6 @@
 package org.senla.repository;
 
 import org.senla.model.Master;
-import org.senla.exception.NotFoundException;
 
 import java.util.List;
 
@@ -11,11 +10,11 @@ import java.util.List;
  * */
 public interface MasterRepository extends CrudRepository<Long, Master> {
     /** Удалить мастера */
-    void remove(Long id) throws NotFoundException;
+    void remove(Long id);
     /** Получить мастеров */
     List<Master> getAll();
     /** Получить мастера */
-    Master get(Long id)  throws NotFoundException ;
+    Master get(Long id);
     /** Сохранить мастеров */
     void saveAll(List<Master> garages);
 }

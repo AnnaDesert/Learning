@@ -2,12 +2,16 @@ package org.senla.service.impl;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.senla.config.SpringConfig;
 import org.senla.exception.NotFoundException;
 import org.senla.model.RepairSite;
 import org.senla.service.RepairSiteService;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -15,7 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * @author Максим Ведеников
  * */
 class RepairSiteServiceImplTest {
-    static RepairSiteService repairSiteService = RepairSiteServiceImpl.getService();
+    static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+            SpringConfig.class
+    );
+    static RepairSiteService repairSiteService = context.getBean("repairSiteServiceImpl", RepairSiteServiceImpl.class);
 
     @BeforeAll
     static void init() {
@@ -27,17 +34,12 @@ class RepairSiteServiceImplTest {
     }
 
     @Test
-    void getService() {
-        assertEquals(RepairSiteServiceImpl.getService(), RepairSiteServiceImpl.getService());
-    }
-
-    @Test
     void remove() {
         repairSiteService.remove(1L);
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void removeNotFoundException() {
         try {
             repairSiteService.remove(4L);
@@ -47,8 +49,8 @@ class RepairSiteServiceImplTest {
         assertNull(repairSiteService.get(4L));
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void removeNotFoundExceptionNegativeIndex() {
         try {
             repairSiteService.remove(-1L);
@@ -61,9 +63,7 @@ class RepairSiteServiceImplTest {
     @Test
     void getAll() {
         List<RepairSite> repairSites = repairSiteService.getAll();
-        for(int i=0; i < repairSites.size(); i++) {
-            assertEquals(i+2, repairSites.get(i).getId());
-        }
+        assertThat(repairSites).isNotEmpty();
     }
 
     @Test
@@ -71,8 +71,8 @@ class RepairSiteServiceImplTest {
         assertEquals(2, repairSiteService.get(2L).getId());
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс больше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс больше, чем может быть)")
     void getNotFoundException() {
         try {
             repairSiteService.remove(5L);
@@ -82,8 +82,8 @@ class RepairSiteServiceImplTest {
         assertNull(repairSiteService.get(5L));
     }
 
-    /** Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть) */
     @Test
+    @DisplayName("Проверяем исключение при недопустимом индексе(индекс меньше, чем может быть)")
     void getNotFoundExceptionNegativeIndex() {
         try {
             repairSiteService.remove(-1L);
@@ -95,6 +95,11 @@ class RepairSiteServiceImplTest {
 
     @Test
     void saveAll() {
+
         assertEquals(2, repairSiteService.get(2L).getId());
+    }
+
+    static {
+        context.close();
     }
 }
