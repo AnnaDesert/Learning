@@ -8,10 +8,9 @@
     <changeSet id="2" author="maksim_vedenikov">
         <sqlFile dbms="mysql"
                  encoding="utf8"
-                 endDelimiter="\nGO"
                  relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="01-create-foreign-key.sql"/>
+                 path="src/01-create-foreign-key.sql"/>
     </changeSet>
 </databaseChangeLog>

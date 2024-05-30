@@ -1,6 +1,7 @@
 package org.senla.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,10 +13,15 @@ import jakarta.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@JsonPropertyOrder({"idShop", "idBatch", "count", "price"})
 public class ProductCatalog {
-  @Id()
+  @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id_shop")
+  private Long id;
+
+  @Column(name = "id_shop", nullable = false)
+  @NotNull
   private Long idShop;
 
   @Column(name = "id_batch", nullable = false)

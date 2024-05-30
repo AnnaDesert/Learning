@@ -1,7 +1,8 @@
 package org.senla.model.dto;
 
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import org.senla.model.RoleEnum;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Getter
@@ -16,17 +18,18 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BatchOfProductDTO {
+  @NotBlank
+  private Long id;
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  @NotNull
-  private OffsetDateTime expirationDateStart;
-
+  @NotBlank
+  private LocalDateTime expirationDateStart;
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  @NotNull
-  private OffsetDateTime expirationDateEnd;
-
-  @NotNull
+  @NotBlank
+  private LocalDateTime expirationDateEnd;
+  @NotBlank
+  @Min(1)
   private Long idProduct;
-
-  @NotNull
+  @NotBlank
+  @Min(1)
   private Integer count;
 }

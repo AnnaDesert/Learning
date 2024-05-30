@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Shop {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

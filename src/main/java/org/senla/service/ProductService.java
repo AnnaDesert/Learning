@@ -2,11 +2,14 @@ package org.senla.service;
 
 import org.senla.model.Product;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
-    Optional<Product> save(Product product);
+    Product save(Product product);
+    List<Product> saveCSV(String fileName) throws IOException;
     void remove(Long id);
     Optional<Product> getById(Long id);
     List<Product> getByName(String name);

@@ -1,51 +1,50 @@
 package org.senla.api;
 
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
+import org.apache.commons.codec.binary.Base64;
 import org.senla.model.Product;
+import org.senla.model.dto.ProductCreationDTO;
 import org.senla.model.dto.ProductDTO;
-import org.senla.model.dto.ProductMapper;
+import org.senla.model.mapper.ProductMapper;
 import org.senla.service.ProductService;
 import org.senla.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.NativeWebRequest;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-import jakarta.annotation.Generated;
 
 import static java.util.stream.Collectors.toList;
-
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-05T16:09:04.794912+03:00[Europe/Moscow]", comments = "Generator version: 7.5.0")
 @RestController
-@RequestMapping("${openapi.openAPI30.base-path:}")
-public class ProductApiController implements ProductApi {
-
-    private final NativeWebRequest request;
+@Validated
+@RequestMapping("/api/v1")
+@Tag(name = "product", description = "Запросы для product")
+public class ProductApiController {
     private final ProductService productService;
     private final ProductMapper productMapper;
     @Autowired
-    public ProductApiController(NativeWebRequest request, ProductServiceImpl productService, ProductMapper productMapper) {
-        this.request = request;
+    public ProductApiController(ProductServiceImpl productService, ProductMapper productMapper) {
         this.productService = productService;
         this.productMapper = productMapper;
     }
 
-    @Override
-    public Optional<NativeWebRequest> getRequest() {
-        return Optional.ofNullable(request);
-    }
-
-    @Override
     @PostMapping("/product")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addProduct(@RequestBody ProductDTO productDTO) {
+    public void addProduct(@RequestBody ProductCreationDTO productDTO) {
         Product product = productMapper.toProduct(productDTO);
         productService.save(product);
     }
 
-    @Override
+    @PostMapping("/product/{fileName}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addProductCSV(@PathVariable String fileName) throws IOException {
+        productService.saveCSV(new String(Base64.encodeBase64(fileName.getBytes())));
+    }
+    
     @GetMapping("/product")
     public List<ProductDTO> allProducts() {
         return productService.getAll()
@@ -54,13 +53,13 @@ public class ProductApiController implements ProductApi {
                 .collect(toList());
     }
 
-    @Override
+    
     @GetMapping("/product/{id}")
-    public ProductDTO getProductById(@PathVariable Long id) {
+    public ProductDTO getProductById(@PathVariable @Min(1) Long id) {
             return productService.getById(id).map(productMapper::toDto).get();
     }
 
-    @Override
+    
     @GetMapping("/product/name/{name}")
     public List<ProductDTO> getProductByName(@PathVariable String name) {
         return productService.getByName(name)
@@ -69,17 +68,19 @@ public class ProductApiController implements ProductApi {
                 .collect(toList());
     }
 
-    @Override
+    
     @DeleteMapping("/product/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void removeProductById(@PathVariable() Long id) {
+    public void removeProductById(@PathVariable @Min(1) Long id) {
         productService.remove(id);
     }
 
-    @Override
+    
     @PatchMapping("/product/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateProduct(@RequestBody ProductDTO productDTO, @PathVariable Long id) {
+    public void updateProduct(
+            @RequestBody ProductCreationDTO productDTO,
+            @PathVariable @Min(1) Long id) {
         Product product = productMapper.toProduct(productDTO);
         productService.update(product, id);
     }

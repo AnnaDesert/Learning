@@ -1,6 +1,7 @@
 package org.senla.service.impl;
 
-import org.senla.exception.NotFoundResourceProductCategoryException;
+import org.senla.exception.NotFoundResourceException;
+import org.senla.model.ProductCategory;
 import org.senla.model.ProductCategory;
 import org.senla.repository.ProductCategoryRepository;
 import org.senla.service.ProductCategoryService;
@@ -21,29 +22,35 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public Optional<ProductCategory> save(ProductCategory productCategory) {
-        return Optional.ofNullable(Optional.of(productCategoryRepository.save(productCategory))
-                .orElseThrow(() ->
-                        new NotFoundResourceProductCategoryException("The productCategory cannot be saved")));
+    public ProductCategory save(ProductCategory productCategory) {
+        return productCategoryRepository.save(productCategory);
     }
 
     @Override
     public void remove(Long id) {
+        Optional<ProductCategory> data = productCategoryRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found productCategory on ID="+id);
+        }
         productCategoryRepository.deleteById(id);
     }
 
     @Override
     public Optional<ProductCategory> getById(Long id) {
-        return Optional.ofNullable(Optional.of(productCategoryRepository.findById(id).get())
-                .orElseThrow(() ->
-                        new NotFoundResourceProductCategoryException("The productCategory with id " + id + " not found")));
+        Optional<ProductCategory> data = productCategoryRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found productCategory on ID="+id);
+        }
+        return data;
     }
 
     @Override
     public Optional<ProductCategory> getByName(String name) {
-        return Optional.ofNullable(productCategoryRepository.findByName(name))
-                .orElseThrow(() ->
-                        new NotFoundResourceProductCategoryException("The productCategory name id " + name + " not found"));
+        Optional<ProductCategory> data = productCategoryRepository.findByName(name);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found productCategory on name="+name);
+        }
+        return productCategoryRepository.findByName(name);
     }
 
     @Override
@@ -53,12 +60,14 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     public Optional<ProductCategory> update(ProductCategory updateProductCategory, Long id) {
-        return Optional.ofNullable(Optional.of(productCategoryRepository.findById(id).get())
+        Optional<ProductCategory> data = productCategoryRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found productCategory on ID="+id);
+        }
+        return data
                 .map(productCategory -> {
-                    productCategory.setName(updateProductCategory.getName());
+                    updateProductCategory.setId(productCategory.getId());
                     return productCategoryRepository.save(updateProductCategory);
-                })
-                .orElseThrow(() ->
-                        new NotFoundResourceProductCategoryException("The productCategory cannot be updated")));
+                });
     }
 }

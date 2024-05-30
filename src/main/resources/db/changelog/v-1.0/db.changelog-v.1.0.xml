@@ -12,5 +12,7 @@
     <include file="01-changeset-batch-of-product-table.xml" relativeToChangelogFile="true"/>
     <include file="01-changeset-product-catalog-table.xml" relativeToChangelogFile="true"/>
     <include file="01-changeset-product-to-category-table.xml" relativeToChangelogFile="true"/>
+    <include file="01-changeset-price-dynamics-table.xml" relativeToChangelogFile="true"/>
+    <include file="01-changeset-token-table.xml" relativeToChangelogFile="true"/>
     <include file="01-changeset-foreign-key.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -8,19 +8,17 @@
     <changeSet id="3" author="maksim_vedenikov">
         <sqlFile dbms="mysql"
                  encoding="utf8"
-                 endDelimiter="\nGO"
                  relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="01-create-product-category-table.sql"/>
+                 path="src/01-create-product-category-table.sql"/>
         <rollback>
             <sqlFile dbms="mysql"
                      encoding="utf8"
-                     endDelimiter="\nGO"
                      relativeToChangelogFile="true"
                      splitStatements="true"
                      stripComments="true"
-                     path="01-drop-product-category-table.sql"/>
+                     path="src/01-drop-product-category-table.sql"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

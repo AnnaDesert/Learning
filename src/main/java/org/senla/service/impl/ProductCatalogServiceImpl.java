@@ -1,6 +1,6 @@
 package org.senla.service.impl;
 
-import org.senla.exception.NotFoundResourceProductCatalogException;
+import org.senla.exception.NotFoundResourceException;
 import org.senla.model.ProductCatalog;
 import org.senla.repository.ProductCatalogRepository;
 import org.senla.service.ProductCatalogService;
@@ -21,22 +21,26 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
     }
 
     @Override
-    public Optional<ProductCatalog> save(ProductCatalog productCatalog) {
-        return Optional.ofNullable(Optional.of(productCatalogRepository.save(productCatalog))
-                .orElseThrow(() ->
-                        new NotFoundResourceProductCatalogException("The productCatalog cannot be saved")));
+    public ProductCatalog save(ProductCatalog productCatalog) {
+        return productCatalogRepository.save(productCatalog);
     }
 
     @Override
     public void remove(Long id) {
+        Optional<ProductCatalog> data = productCatalogRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found productCatalog on ID="+id);
+        }
         productCatalogRepository.deleteById(id);
     }
 
     @Override
     public Optional<ProductCatalog> getById(Long id) {
-        return Optional.ofNullable(Optional.of(productCatalogRepository.findById(id).get())
-                .orElseThrow(() ->
-                        new NotFoundResourceProductCatalogException("The productCatalog with id " + id + " not found")));
+        Optional<ProductCatalog> data = productCatalogRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found productCatalog on ID="+id);
+        }
+        return data;
     }
 
     @Override
@@ -45,15 +49,48 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
     }
 
     @Override
+    public List<ProductCatalog> comparePrices(Long id) {
+        Optional<ProductCatalog> compareProductCatalog = productCatalogRepository.findById(id);
+        if(!compareProductCatalog.isPresent()) {
+            throw new NotFoundResourceException("Not found productCatalog on ID="+id);
+        }
+        List<ProductCatalog> sortedProductCatalogByPrice = productCatalogRepository.findAllOrderedByPrice(
+                compareProductCatalog.get().getIdBatch()
+        );
+        List<ProductCatalog> compareByPricesForProductCatalog = new ArrayList<>();
+        for(ProductCatalog productCatalog: sortedProductCatalogByPrice) {
+            if(compareProductCatalog.get().getId() == productCatalog.getId()) {
+                continue;
+            }
+            float comparePrices = 0;
+            if(productCatalog.getPrice() > compareProductCatalog.get().getPrice()) {
+                comparePrices = ((productCatalog.getPrice()-compareProductCatalog.get().getPrice())/productCatalog.getPrice())*100;
+            } else {
+                comparePrices = -((compareProductCatalog.get().getPrice() - productCatalog.getPrice())/compareProductCatalog.get().getPrice())*100;
+            }
+            compareByPricesForProductCatalog.add(new ProductCatalog(
+                    productCatalog.getId(),
+                    productCatalog.getIdShop(),
+                    productCatalog.getIdBatch(),
+                    productCatalog.getCount(),
+                    comparePrices,
+                    productCatalog.getShop(),
+                    productCatalog.getBatchOfProduct()
+            ));
+        }
+        return compareByPricesForProductCatalog;
+    }
+
+    @Override
     public Optional<ProductCatalog> update(ProductCatalog updateProductCatalog, Long id) {
-        return Optional.ofNullable(Optional.of(productCatalogRepository.findById(id).get())
+        Optional<ProductCatalog> data = productCatalogRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found productCatalog on ID="+id);
+        }
+        return data
                 .map(productCatalog -> {
-                    productCatalog.setCount(updateProductCatalog.getCount());
-                    productCatalog.setPrice(updateProductCatalog.getPrice());
-                    productCatalog.setIdBatch(updateProductCatalog.getIdBatch());
+                    updateProductCatalog.setId(productCatalog.getId());
                     return productCatalogRepository.save(updateProductCatalog);
-                })
-                .orElseThrow(() ->
-                        new NotFoundResourceProductCatalogException("The productCatalog cannot be updated")));
+                });
     }
 }

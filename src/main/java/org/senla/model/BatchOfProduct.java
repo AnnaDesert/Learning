@@ -1,6 +1,6 @@
 package org.senla.model;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -16,6 +16,7 @@ import jakarta.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BatchOfProduct {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +25,12 @@ public class BatchOfProduct {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   @Column(name = "expiration_date_start", nullable = false)
   @NotNull
-  private OffsetDateTime expirationDateStart;
+  private LocalDateTime expirationDateStart;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   @Column(name = "expiration_date_end", nullable = false)
   @NotNull
-  private OffsetDateTime expirationDateEnd;
+  private LocalDateTime expirationDateEnd;
 
   @Column(name = "id_product", nullable = false)
   @NotNull

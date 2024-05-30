@@ -1,7 +1,6 @@
 package org.senla.model.dto;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,12 +11,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShopDTO {
-  @NotNull
+  @NotBlank
+  private Long id;
+  @NotBlank
   private String name;
-
-  @NotNull
+  @NotBlank
   private String address;
-
-  @NotNull
+  @NotBlank
   private Long idAdmin;
 }

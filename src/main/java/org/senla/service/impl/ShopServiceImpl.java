@@ -1,6 +1,7 @@
 package org.senla.service.impl;
 
-import org.senla.exception.NotFoundResourceShopException;
+import org.senla.exception.NotFoundResourceException;
+import org.senla.model.Shop;
 import org.senla.model.Shop;
 import org.senla.repository.ShopRepository;
 import org.senla.service.ShopService;
@@ -21,22 +22,26 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public Optional<Shop> save(Shop shop) {
-        return Optional.ofNullable(Optional.of(shopRepository.save(shop))
-                .orElseThrow(() ->
-                        new NotFoundResourceShopException("The shop cannot be saved")));
+    public Shop save(Shop shop) {
+        return shopRepository.save(shop);
     }
 
     @Override
     public void remove(Long id) {
+        Optional<Shop> data = shopRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found shop on ID="+id);
+        }
         shopRepository.deleteById(id);
     }
 
     @Override
     public Optional<Shop> getById(Long id) {
-        return Optional.ofNullable(Optional.of(shopRepository.findById(id).get())
-                .orElseThrow(() ->
-                        new NotFoundResourceShopException("The shop with id " + id + " not found")));
+        Optional<Shop> data = shopRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found shop on ID="+id);
+        }
+        return data;
     }
 
     @Override
@@ -56,14 +61,14 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public Optional<Shop> update(Shop updateShop, Long id) {
-        return Optional.ofNullable(Optional.of(shopRepository.findById(id).get())
+        Optional<Shop> data = shopRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found shop on ID="+id);
+        }
+        return data
                 .map(shop -> {
-                    shop.setName(updateShop.getName());
-                    shop.setAddress(updateShop.getAddress());
-                    shop.setIdAdmin(updateShop.getIdAdmin());
+                    updateShop.setId(shop.getId());
                     return shopRepository.save(updateShop);
-                })
-                .orElseThrow(() ->
-                        new NotFoundResourceShopException("The shop cannot be updated")));
+                });
     }
 }

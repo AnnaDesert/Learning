@@ -1,44 +1,40 @@
 package org.senla.api;
 
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
 import org.senla.model.User;
 import org.senla.model.dto.UserCreationDTO;
 import org.senla.model.dto.UserDTO;
-import org.senla.model.dto.UserMapper;
+import org.senla.model.mapper.UserMapper;
 import org.senla.service.UserService;
 import org.senla.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.NativeWebRequest;
 
 import java.util.List;
 import java.util.Optional;
-import jakarta.annotation.Generated;
 
 import static java.util.stream.Collectors.toList;
-
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-05T16:09:04.794912+03:00[Europe/Moscow]", comments = "Generator version: 7.5.0")
 @RestController
-@RequestMapping("${openapi.openAPI30.base-path:}")
-public class UserApiController implements UserApi {
-
-    private final NativeWebRequest request;
+@Validated
+@RequestMapping("/api/v1")
+@Tag(name = "user", description = "Запросы для user")
+public class UserApiController {
     private final UserService userService;
     private final UserMapper userMapper;
     @Autowired
-    public UserApiController(NativeWebRequest request, UserServiceImpl userService, UserMapper userMapper) {
-        this.request = request;
+    public UserApiController(UserServiceImpl userService, UserMapper userMapper) {
         this.userService = userService;
         this.userMapper = userMapper;
     }
 
-    @Override
-    public Optional<NativeWebRequest> getRequest() {
-        return Optional.ofNullable(request);
-    }
-
-    @Override
     @GetMapping("/user")
     @ResponseBody
     public List<UserDTO> allUser() {
@@ -48,36 +44,52 @@ public class UserApiController implements UserApi {
                 .collect(toList());
     }
 
-    @Override
     @GetMapping("/user/email/{email}")
     @ResponseBody
-    public Optional<UserDTO> userByEmail(@PathVariable String email) {
+    public Optional<UserDTO> userByEmail(
+            @Parameter(name = "email", description = "Адрес электронной почты", required = true, in = ParameterIn.PATH)
+            @PathVariable("email") @Email String email
+    ) {
         return userService.getByEmail(email).map(userMapper::toDto);
     }
-
-    @Override
+    
     @GetMapping("/user/{id}")
     @ResponseBody
-    public Optional<UserDTO> userById(@PathVariable Long id) {
+    public Optional<UserDTO> userById(
+            @Parameter(name = "id", description = "ID пользователя", required = true, in = ParameterIn.PATH)
+            @PathVariable("id") @Min(1) Long id
+    ) {
         return userService.getById(id).map(userMapper::toDto);
     }
-
-    @Override
+    
     @GetMapping("/user/phoneNumber/{phoneNumber}")
     @ResponseBody
-    public Optional<UserDTO> userByPhone(@PathVariable String phoneNumber) {
+    public Optional<UserDTO> userByPhone(
+            @Parameter(name = "phoneNumber", description = "Номер телефона", required = true, in = ParameterIn.PATH)
+            @PathVariable("phoneNumber") String phoneNumber
+    ) {
         return userService.getByPhoneNumber(phoneNumber).map(userMapper::toDto);
     }
 
-    @Override
+    @GetMapping("/user/name/{name}")
+    @ResponseBody
+    public List<UserDTO> userByName(
+            @Parameter(name = "name", description = "Имя пользователя", required = true, in = ParameterIn.PATH)
+            @PathVariable("name") String name
+    ) {
+        return userService.getByName(name)
+                .stream()
+                .map(userMapper::toDto)
+                .collect(toList());
+    }
+    
     @DeleteMapping("/user/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void removeUserById(@PathVariable Long id) {
+    public void removeUserById(@PathVariable @Min(1) Long id) {
         userService.getById(id);
     }
-
-    @Override
+    
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -86,11 +98,10 @@ public class UserApiController implements UserApi {
         userService.save(user);
     }
 
-    @Override
     @PatchMapping("/user/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void updateUser(@RequestBody UserCreationDTO userDTO, @PathVariable Long id) {
+    public void updateUser(@RequestBody UserCreationDTO userDTO, @PathVariable @Min(1) Long id) {
         User user = userMapper.toUser(userDTO);
         userService.update(user, id);
     }

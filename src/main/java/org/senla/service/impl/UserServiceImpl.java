@@ -1,42 +1,47 @@
 package org.senla.service.impl;
 
-import org.senla.exception.NotFoundResourceUserException;
+import lombok.RequiredArgsConstructor;
+import org.senla.exception.NotFoundResourceException;
 import org.senla.model.User;
+import org.senla.model.dto.ChangePasswordRequestDTO;
 import org.senla.repository.UserRepository;
 import org.senla.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Optional<User> save(User user) {
-        return Optional.ofNullable(Optional.of(userRepository.save(user))
-                .orElseThrow(() ->
-                        new NotFoundResourceUserException("The user cannot be saved")));
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     @Override
     public void remove(Long id) {
+        Optional<User> data = userRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found user on ID="+id);
+        }
         userRepository.deleteById(id);
     }
 
     @Override
     public Optional<User> getById(Long id) {
-        return Optional.ofNullable(Optional.of(userRepository.findById(id).get())
-                .orElseThrow(() ->
-                        new NotFoundResourceUserException("The user with id " + id + " not found")));
+        Optional<User> data = userRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found user on ID="+id);
+        }
+        return data;
     }
 
     @Override
@@ -46,16 +51,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getByEmail(String email) {
-        return Optional.ofNullable(userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new NotFoundResourceUserException("The user with email " + email + " not found")));
+        Optional<User> data = userRepository.findByEmail(email);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found user on email="+email);
+        }
+        return data;
     }
 
     @Override
     public Optional<User> getByPhoneNumber(String phoneNumber) {
-        return Optional.ofNullable(userRepository.findByPhoneNumber(phoneNumber)
-                .orElseThrow(() ->
-                        new NotFoundResourceUserException("The user with phone" + phoneNumber + " not found")));
+        Optional<User> data = userRepository.findByPhoneNumber(phoneNumber);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found user on phoneNumber="+phoneNumber);
+        }
+        return data;
     }
 
     @Override
@@ -65,17 +74,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> update(User updateUser, Long id) {
-        return Optional.ofNullable(Optional.of(userRepository.findById(id).get())
+        Optional<User> data = userRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found user on ID="+id);
+        }
+        return data
                 .map(user -> {
-                    user.setName(updateUser.getName());
-                    user.setSurname(updateUser.getSurname());
-                    user.setPassword(updateUser.getPassword());
-                    user.setEmail(updateUser.getEmail());
-                    user.setPhoneNumber(updateUser.getPhoneNumber());
-                    user.setRole(updateUser.getRole());
+                    updateUser.setId(user.getId());
                     return userRepository.save(updateUser);
-                })
-                .orElseThrow(() ->
-                        new NotFoundResourceUserException("The user cannot be updated")));
+                });
+    }
+
+    @Override
+    public void changePassword(ChangePasswordRequestDTO request, Principal connectedUser) {
+        User user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        // check if the current password is correct
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new IllegalStateException("Wrong password");
+        }
+        // check if the two new passwords are the same
+        if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
+            throw new IllegalStateException("Password are not the same");
+        }
+
+        // update the password
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+        // save the new password
+        userRepository.save(user);
     }
 }

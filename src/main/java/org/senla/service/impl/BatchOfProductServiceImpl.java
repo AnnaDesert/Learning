@@ -1,6 +1,6 @@
 package org.senla.service.impl;
 
-import org.senla.exception.NotFoundResourceBatchOfProductException;
+import org.senla.exception.NotFoundResourceException;
 import org.senla.model.BatchOfProduct;
 import org.senla.repository.BatchOfProductRepository;
 import org.senla.service.BatchOfProductService;
@@ -21,22 +21,26 @@ public class BatchOfProductServiceImpl implements BatchOfProductService {
     }
 
     @Override
-    public Optional<BatchOfProduct> save(BatchOfProduct batchOfProduct) {
-        return Optional.ofNullable(Optional.of(batchOfProductRepository.save(batchOfProduct))
-                .orElseThrow(() ->
-                        new NotFoundResourceBatchOfProductException("The batchOfProduct cannot be saved")));
+    public BatchOfProduct save(BatchOfProduct batchOfProduct) {
+        return batchOfProductRepository.save(batchOfProduct);
     }
 
     @Override
     public void remove(Long id) {
+        Optional<BatchOfProduct> data = batchOfProductRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found batchOfProduct on ID="+id);
+        }
         batchOfProductRepository.deleteById(id);
     }
 
     @Override
     public Optional<BatchOfProduct> getById(Long id) {
-        return Optional.ofNullable(Optional.of(batchOfProductRepository.findById(id).get())
-                .orElseThrow(() ->
-                        new NotFoundResourceBatchOfProductException("The batchOfProduct with id " + id + " not found")));
+        Optional<BatchOfProduct> data = batchOfProductRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found batchOfProduct on ID="+id);
+        }
+        return data;
     }
 
     @Override
@@ -46,15 +50,14 @@ public class BatchOfProductServiceImpl implements BatchOfProductService {
 
     @Override
     public Optional<BatchOfProduct> update(BatchOfProduct updateBatchOfProduct, Long id) {
-        return Optional.ofNullable(Optional.of(batchOfProductRepository.findById(id).get())
+        Optional<BatchOfProduct> data = batchOfProductRepository.findById(id);
+        if(!data.isPresent()) {
+            throw new NotFoundResourceException("Not found batchOfProduct on ID="+id);
+        }
+        return data
                 .map(batchOfProduct -> {
-                    batchOfProduct.setIdProduct(updateBatchOfProduct.getIdProduct());
-                    batchOfProduct.setExpirationDateStart(updateBatchOfProduct.getExpirationDateStart());
-                    batchOfProduct.setExpirationDateEnd(updateBatchOfProduct.getExpirationDateEnd());
-                    batchOfProduct.setCount(updateBatchOfProduct.getCount());
+                    updateBatchOfProduct.setId(batchOfProduct.getId());
                     return batchOfProductRepository.save(updateBatchOfProduct);
-                })
-                .orElseThrow(() ->
-                        new NotFoundResourceBatchOfProductException("The batchOfProduct cannot be updated")));
+                });
     }
 }

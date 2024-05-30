@@ -8,19 +8,17 @@
     <changeSet id="7" author="maksim_vedenikov">
         <sqlFile dbms="mysql"
                  encoding="utf8"
-                 endDelimiter="\nGO"
                  relativeToChangelogFile="true"
                  splitStatements="true"
                  stripComments="true"
-                 path="01-create-user-table.sql"/>
+                 path="src/01-create-user-table.sql"/>
         <rollback>
             <sqlFile dbms="mysql"
                      encoding="utf8"
-                     endDelimiter="\nGO"
                      relativeToChangelogFile="true"
                      splitStatements="true"
                      stripComments="true"
-                     path="01-drop-user-table.sql"/>
+                     path="src/01-drop-user-table.sql"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>
