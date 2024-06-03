@@ -22,13 +22,13 @@ import org.senla.auditing.ApplicationAuditAware;
 public class ApplicationConfig {
     private final UserRepository userRepository;
 
-    @Bean(name = "org.senla.configuration.SpringDocConfiguration.userDetailsService")
+    @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
                 .orElseThrow(() -> new NotFoundResourceException("Not found user on email="+username));
     }
 
-    @Bean(name = "org.senla.configuration.SpringDocConfiguration.authenticationProvider")
+    @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
@@ -36,17 +36,17 @@ public class ApplicationConfig {
         return authProvider;
     }
 
-    @Bean(name = "org.senla.configuration.SpringDocConfiguration.auditorAware")
+    @Bean
     public ApplicationAuditAware auditorAware() {
         return new ApplicationAuditAware();
     }
 
-    @Bean(name = "org.senla.configuration.SpringDocConfiguration.authenticationManager")
+    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    @Bean(name = "org.senla.configuration.SpringDocConfiguration.passwordEncoder")
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }

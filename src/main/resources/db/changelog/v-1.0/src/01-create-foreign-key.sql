@@ -23,3 +23,9 @@ ALTER TABLE `product_to_category`
 --
 ALTER TABLE `shop`
   ADD CONSTRAINT `shop_ibfk_1` FOREIGN KEY (`id_admin`) REFERENCES `user` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `token`
+--
+ALTER TABLE `token`
+  ADD CONSTRAINT `token_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);

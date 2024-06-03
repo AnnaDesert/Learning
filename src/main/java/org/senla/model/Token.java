@@ -14,29 +14,29 @@ import lombok.*;
 @Table(name = "token")
 public class Token {
     @Id
-    @GeneratedValue
-    public Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false, unique = true)
     @NotNull
-    public String token;
+    private String token;
 
     @Enumerated(EnumType.STRING)
     @NotNull
     @Column(nullable = false, name = "token_type")
     @Builder.Default
-    public TokenTypeEnum tokenType = TokenTypeEnum.BEARER;
+    private TokenTypeEnum tokenType = TokenTypeEnum.BEARER;
 
     @NotNull
     @Column(nullable = false)
-    public boolean revoked;
+    private boolean revoked;
 
     @NotNull
     @Column(nullable = false)
-    public boolean expired;
+    private boolean expired;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn()
     @JsonIgnore
-    public User user;
+    private User user;
 }

@@ -49,7 +49,7 @@ public class User implements UserDetails {
   @JsonIgnore
   private Shop shop;
 
-  @OneToMany(mappedBy = "user")
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "id")
   @JsonIgnore
   private List<Token> tokens;
