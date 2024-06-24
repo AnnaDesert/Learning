@@ -1,0 +1,1171 @@
+openapi: 3.0.3
+info:
+  title: Национальный сервис мониторинга цен на продовольственные товары(OpenAPI 3.0)
+  description: |-
+    Национальный сервис мониторинга цен на продовольственные товары
+    
+    Полезные ссылки:
+    - [Репозиторий](https://github.com/AnnaDesert/Learning)
+  version: 1.0.11
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+tags:
+  - name: product
+    description: Запросы для product
+  - name: batch
+    description: Запросы для batch_of_product
+  - name: category
+    description: Запросы для product_category
+  - name: shop
+    description: Запросы для shop
+  - name: catalog
+    description: Запросы для product_catalog
+  - name: user
+    description: Запросы для user
+  - name: auth
+    description: Запросы для authentication
+  - name: dynamics
+    description: Запросы для PriceDynamics
+    
+paths:
+  /user:
+    get:
+      tags:
+        - user
+      summary: Получить всеx пользователей
+      description: Получить всеx пользователей
+      operationId: allUser
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+    post:
+      tags:
+        - user
+      summary: Добваить пользователя
+      description: Добваить нового пользователя
+      operationId: singUpUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreationDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+          
+  /user/{id}:
+    get:
+      tags:
+        - user
+      summary: Получить пользователя по ID
+      description: Получить пользователя по ID
+      operationId: userById
+      parameters:
+        - name: id
+          in: path
+          description: ID пользователя
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+    delete:
+      tags:
+        - user
+      summary: Удалить пользователя по ID
+      description: Удалить пользователя по ID
+      operationId: removeUserById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+    patch:
+      tags:
+        - user
+      summary: Изменить пользователя
+      description: Изменить пользователя
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreationDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+  /user/phoneNumber/{phoneNumber}:
+    get:
+      tags:
+        - user
+      summary: Получить пользователя по номеру телефона
+      description: Получить пользователя по номеру телефона
+      operationId: userByPhone
+      parameters:
+        - name: phoneNumber
+          in: path
+          description: Номер телефона
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+  /user/name/{name}:
+    get:
+      tags:
+        - user
+      summary: Получить пользователя по имени
+      description: Получить пользователя по имени
+      operationId: userByName
+      parameters:
+        - name: name
+          in: path
+          description: Имя пользователя
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+  /user/email/{email}:
+    get:
+      tags:
+        - user
+      summary: Получить пользователя по адресу электронной почты
+      description: Получить пользователя по адресу электронной почты
+      operationId: userByEmail
+      parameters:
+        - name: email
+          in: path
+          description: Адрес электронной почты
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+                
+  /shop:
+    get:
+      tags:
+        - shop
+      summary: Получить все торговые точки
+      description: Получить все торговые точки
+      operationId: allShop
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShopDTO'
+    post:
+      tags:
+        - shop
+      summary: Добваить торговую точку
+      description: Добваить торговую точку
+      operationId: addShop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShopCreationDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+  /shop/{id}:
+    get:
+      tags:
+        - shop
+      summary: Получить торговую точку по ID
+      description: Получить торговую точку по ID
+      operationId: getShopById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ShopDTO'
+    delete:
+      tags:
+        - shop
+      summary: Удалить торговую точку по ID
+      description: Удалить торговую точку по ID
+      operationId: removeShopById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+    patch:
+      tags:
+        - shop
+      summary: Изменить торговую точку
+      description: Изменить торговую точку
+      operationId: updateShop
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShopCreationDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+  /shop/name/{name}:
+    get:
+      tags:
+        - shop
+      summary: Получить торговую точку по названию
+      description: Получить торговую точку по названию
+      operationId: getShopByName
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShopDTO'
+  /shop/address/{address}:
+    get:
+      tags:
+        - shop
+      summary: Получить торговую точку по адресу
+      description: Получить торговую точку по адресу
+      operationId: getShopByAddress
+      parameters:
+        - name: address
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShopDTO'
+                  
+  /product:
+    get:
+      tags:
+        - product
+      summary: Получить все товары
+      description: Получить все товары
+      operationId: allProducts
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductDTO'
+    post:
+      tags:
+        - product
+      summary: Добваить продукт
+      description: Добваить новый продукт
+      operationId: addProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCreationDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+  /product/{id}:
+    get:
+      tags:
+        - product
+      summary: Получить товар по ID
+      description: Получить товар по ID
+      operationId: getProductById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProductDTO'
+    delete:
+      tags:
+        - product
+      summary: Удалить товар по ID
+      description: Удалить товар по ID
+      operationId: removeProductById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+    patch:
+      tags:
+        - product
+      summary: Изменить продукт
+      description: Изменить продукт
+      operationId: updateProduct
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCreationDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+  /product/name/{name}:
+    get:
+      tags:
+        - product
+      summary: Получить товар по названию
+      description: Получить товар по названию
+      operationId: getProductByName
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductDTO'
+  /product/category/{category}:
+    get:
+      tags:
+        - product
+      summary: Получить товар по категории
+      description: Получить товар по категории
+      operationId: getProductByCategory
+      parameters:
+        - name: category
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductDTO'
+  /product/{fileName}:
+    post:
+      tags:
+        - product
+      summary: Добавить товары из csv файла
+      description: Добавить товары из csv файла
+      operationId: addProductFromCSV
+      parameters:
+        - name: fileName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /category:
+    get:
+      tags:
+        - category
+      summary: Получить все категории товара
+      description: Получить все категории товара
+      operationId: allCategory
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductCategoryDTO'
+    post:
+      tags:
+        - category
+      summary: Добваить категорию товара
+      description: Добваить категорию товара
+      operationId: addCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCategoryCreationDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+  /category/{id}:
+    get:
+      tags:
+        - category
+      summary: Получить категорию товара по ID
+      description: Получить категорию товара по ID
+      operationId: getCategoryById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProductCategoryDTO'
+    delete:
+      tags:
+        - category
+      summary: Удалить категорию товара по ID
+      description: Удалить категорию товара по ID
+      operationId: removeCategoryById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+    patch:
+      tags:
+        - category
+      summary: Изменить категорию товара
+      description: Изменить категорию товара
+      operationId: updateCategory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCategoryCreationDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+  /category/name/{name}:
+    get:
+      tags:
+        - category
+      summary: Получить категорию товара по названию
+      description: Получить категорию товара по названию
+      operationId: getCategoryByName
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProductCategoryDTO' 
+          
+  /catalog:
+    get:
+      tags:
+        - catalog
+      summary: Получить все каталоги
+      description: Получить все каталоги
+      operationId: allCatalog
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductCatalogDTO'
+    post:
+      tags:
+        - catalog
+      summary: Добваить каталог
+      description: Добваить каталог
+      operationId: addCatalog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCatalogCreationDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+  /catalog/{id}:
+    get:
+      tags:
+        - catalog
+      summary: Получить каталог по ID торговой точки
+      description: Получить каталог по ID торговой точки
+      operationId: getCatalogByIdShop
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProductCatalogDTO'
+    delete:
+      tags:
+        - catalog
+      summary: Удалить каталог по ID торговой точки
+      description: Удалить каталог по ID торговой точки
+      operationId: removeCatalogByIdShop
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+    patch:
+      tags:
+        - catalog
+      summary: Изменить каталог
+      description: Изменить каталог
+      operationId: updateCatalog
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCatalogCreationDTO'
+        required: true
+      responses:
+        '200':
+          description: OK     
+  /catalog/compareByPrice/{id}:
+    get:
+      tags:
+        - catalog
+      summary: Сравнить цены
+      description: Сравнить цены
+      operationId: comparePrices
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductCatalogDTO'
+          
+  /batch:
+    get:
+      tags:
+        - batch
+      summary: Получить все партии
+      description: Получить все партии
+      operationId: allBatch
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BatchOfProductDTO'
+    post:
+      tags:
+        - batch
+      summary: Добваить партию
+      description: Добваить партию
+      operationId: addBatch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchOfProductCreationDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+  /batch/{id}:
+    get:
+      tags:
+        - batch
+      summary: Получить партию по ID
+      description: Получить партию по ID
+      operationId: getBatchById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BatchOfProductDTO'
+    delete:
+      tags:
+        - batch
+      summary: Удалить партию по ID
+      description: Удалить партию по ID
+      operationId: removeBatchById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+    patch:
+      tags:
+        - batch
+      summary: Изменить партию
+      description: Изменить партию
+      operationId: updateBatch
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchOfProductCreationDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+  /batch/productCategory/{productCategory}:
+    get:
+      tags:
+        - batch
+      summary: Получить партии по категории
+      description: Получить партии по категории
+      operationId: getBatchByProductCategory
+      parameters:
+        - name: productCategory
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BatchOfProductDTO'
+                  
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Зарегистрировать пользователя
+      description: Зарегистрировать пользователя
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreationDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponseDTO'
+  /auth/authenticate:
+    post:
+      tags:
+        - auth
+      summary: Аутентифицирвать пользователя
+      description: Аутентифицирвать пользователя
+      operationId: authenticate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequestDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponseDTO'
+                  
+  /dynamics:
+    post:
+      tags:
+        - dynamics
+      summary: Получить динамику цен
+      description: Получить динамику цен
+      operationId: getPriceDynamics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceDynamicsRequestDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PriceDynamicsResponseDTO'
+                  
+components:
+  schemas:
+    UserCreationDTO:
+      required:
+        - email
+        - name
+        - password
+        - phoneNumber
+        - role
+        - surname
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+        surname:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum:
+            - SUPER_ADMIN
+            - ADMIN
+            - USER
+    ShopCreationDTO:
+      required:
+        - address
+        - idAdmin
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        idAdmin:
+          type: integer
+          format: int64
+    PriceDynamicsRequestDTO:
+      required:
+        - dateStart
+        - dateEnd
+        - idShop
+        - idBatch
+      type: object
+      properties:
+        dateStart:
+          type: string
+          format: date-time
+        dateEnd:
+          type: string
+          format: date-time
+        idShop:
+          type: integer
+          format: int64
+        idBatch:
+          type: integer
+          format: int64
+    ChangePasswordRequestDTO:
+      required:
+        - currentPassword
+        - newPassword
+        - confirmationPassword
+      type: object
+      properties:
+        currentPassword:
+          type: string
+        newPassword:
+          type: string
+        confirmationPassword:
+          type: string
+    PriceDynamicsResponseDTO:
+      required:
+        - date
+        - price
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        price:
+          type: number
+          format: float
+    AuthenticationResponseDTO:
+      required:
+        - accessToken
+        - refreshToken
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+    AuthenticationRequestDTO:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    ProductCreationDTO:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+    ProductCategoryCreationDTO:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+    ProductCatalogCreationDTO:
+      required:
+        - count
+        - idBatch
+        - idShop
+        - price
+      type: object
+      properties:
+        idShop:
+          type: integer
+          format: int64
+        idBatch:
+          type: integer
+          format: int64
+        count:
+          type: integer
+          format: int32
+        price:
+          type: number
+          format: float
+    BatchOfProductCreationDTO:
+      required:
+        - count
+        - expirationDateEnd
+        - expirationDateStart
+        - idProduct
+      type: object
+      properties:
+        expirationDateStart:
+          type: string
+          format: date-time
+        expirationDateEnd:
+          type: string
+          format: date-time
+        idProduct:
+          type: integer
+          format: int64
+        count:
+          type: integer
+          format: int32
+    UserDTO:
+      required:
+        - email
+        - id
+        - name
+        - phoneNumber
+        - role
+        - surname
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        surname:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum:
+            - SUPER_ADMIN
+            - ADMIN
+            - USER
+    ShopDTO:
+      required:
+        - address
+        - id
+        - idAdmin
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        address:
+          type: string
+        idAdmin:
+          type: integer
+          format: int64
+    ProductDTO:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    ProductCategoryDTO:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    ProductCatalogDTO:
+      required:
+        - count
+        - id
+        - idBatch
+        - idShop
+        - price
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        idShop:
+          type: integer
+          format: int64
+        idBatch:
+          type: integer
+          format: int64
+        count:
+          type: integer
+          format: int32
+        price:
+          type: number
+          format: float
+    BatchOfProductDTO:
+      required:
+        - count
+        - expirationDateEnd
+        - expirationDateStart
+        - id
+        - idProduct
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        expirationDateStart:
+          type: string
+          format: date-time
+        expirationDateEnd:
+          type: string
+          format: date-time
+        idProduct:
+          type: integer
+          format: int64
+        count:
+          type: integer
+          format: int32
