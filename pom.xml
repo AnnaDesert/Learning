@@ -25,45 +25,9 @@
         <mongo.vesion>5.1.0</mongo.vesion>
         <test.containers.version>1.19.8</test.containers.version>
         <kafka.version>3.2.0</kafka.version>
+        <openapi.file>${project.basedir}/src/main/resources/openapi.yaml</openapi.file>
+        <generated-sources-java-path>main/java</generated-sources-java-path>
     </properties>
-
-    <modules>
-        <module>entities-module</module>
-        <module>user-module</module>
-        <module>core-module</module>
-        <module>information-collection-module</module>
-        <module>information-listener-module</module>
-    </modules>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.senla</groupId>
-                <artifactId>entities-module</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.senla</groupId>
-                <artifactId>user-module</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.senla</groupId>
-                <artifactId>information-collection-module</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.senla</groupId>
-                <artifactId>core-module</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.senla</groupId>
-                <artifactId>information-listener-module</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -79,26 +43,45 @@
                 <groupId>io.swagger.codegen.v3</groupId>
                 <artifactId>swagger-codegen-maven-plugin</artifactId>
                 <version>3.0.55</version>
+                <configuration>
+                    <inputSpec>${openapi.file}</inputSpec>
+                    <configOptions>
+                        <sourceFolder>${generated-sources-java-path}</sourceFolder>
+                    </configOptions>
+                    <output>${generated-sources-path}</output>
+                    <language>java</language>
+                </configuration>
                 <executions>
                     <execution>
+                        <id>generate-swagger-spring</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/openapi.yaml</inputSpec>
                             <language>spring</language>
-                            <apiPackage>io.codejournal.maven.swagger2java.api</apiPackage>
-                            <modelPackage>io.codejournal.maven.swagger2java.model</modelPackage>
-                            <invokerPackage>io.codejournal.maven.swagger2java.handler</invokerPackage>
+                            <apiPackage>org.senla.swagger.api</apiPackage>
+                            <modelPackage>org.senla.swagger.model</modelPackage>
+                            <invokerPackage>org.senla.swagger.handler</invokerPackage>
                             <generateApiTests>false</generateApiTests>
                             <generateApiDocumentation>true</generateApiDocumentation>
+                            <generateSupportingFiles>true</generateSupportingFiles>
                             <generateModelTests>false</generateModelTests>
                             <generateModelDocumentation>false</generateModelDocumentation>
-                            <generateSupportingFiles>true</generateSupportingFiles>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <typeMappings>
+                                <typeMapping>OffsetDateTime=LocalDateTime</typeMapping>
+                            </typeMappings>
+                            <importMappings>
+                                <importMapping>java.time.OffsetDateTime=java.time.LocalDateTime</importMapping>
+                            </importMappings>
                             <configOptions>
                                 <interfaceOnly>true</interfaceOnly>
                                 <dateLibrary>java8</dateLibrary>
+                                <defaultInterfaces>false</defaultInterfaces>
+<!--                                <additionalModelTypeAnnotations>@lombok.Builder</additionalModelTypeAnnotations>-->
                             </configOptions>
+                            <inputSpec>${openapi.file}</inputSpec>
                         </configuration>
                     </execution>
                 </executions>
@@ -132,6 +115,39 @@
             </plugin>
         </plugins>
     </build>
+
+    <modules>
+        <module>db-module</module>
+        <module>user-module</module>
+        <module>core-module</module>
+        <module>event-manager-module</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.senla</groupId>
+                <artifactId>db-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.senla</groupId>
+                <artifactId>user-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.senla</groupId>
+                <artifactId>core-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.senla</groupId>
+                <artifactId>event-manager-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations -->
         <dependency>
@@ -145,18 +161,6 @@
             <artifactId>swagger-codegen-maven-plugin</artifactId>
             <version>3.0.55</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.swagger.codegen.v3/swagger-codegen-generators -->
-        <dependency>
-            <groupId>io.swagger.codegen.v3</groupId>
-            <artifactId>swagger-codegen-generators</artifactId>
-            <version>1.0.48</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.velopayments/java-spring-resttemplate -->
-<!--        <dependency>-->
-<!--            <groupId>com.velopayments</groupId>-->
-<!--            <artifactId>java-spring-resttemplate</artifactId>-->
-<!--            <version>2.20.118</version>-->
-<!--        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -174,12 +178,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring.version}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.5.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -214,7 +212,6 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -352,6 +349,12 @@
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
             <version>${kafka.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.1.0</version>
         </dependency>
     </dependencies>
 </project>

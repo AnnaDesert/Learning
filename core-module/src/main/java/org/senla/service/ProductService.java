@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface ProductService {
     Product save(Product product);
-    List<Product> saveCSV(String fileName) throws IOException;
+    List<Product> saveCSV(String fileName);
     void remove(Long id);
     Optional<Product> getById(Long id);
     List<Product> getByName(String name);

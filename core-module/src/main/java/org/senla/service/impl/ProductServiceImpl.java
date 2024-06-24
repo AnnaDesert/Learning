@@ -6,13 +6,14 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import lombok.RequiredArgsConstructor;
 import org.senla.exception.NotFoundResourceException;
 import org.senla.model.Product;
-import org.senla.model.dto.ProductCreationDTO;
+import org.senla.swagger.model.ProductCreationDTO;
 import org.senla.model.mapper.ProductMapper;
 import org.senla.repository.ProductRepository;
 import org.senla.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -35,20 +36,34 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> saveCSV(String fileName) throws IOException {
-        Reader myReader = new FileReader(new String(Base64.decodeBase64(fileName)));
+    public List<Product> saveCSV(String fileName) {
+        Reader myReader = null;
+        try {
+            myReader = new FileReader(new String(Base64.decodeBase64(fileName)));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         CsvMapper mapper = new CsvMapper();
         CsvSchema schema = mapper.schemaFor(ProductCreationDTO.class)
                 .withColumnSeparator(';').withSkipFirstDataRow(true);
-        MappingIterator<ProductCreationDTO> iterator = mapper
-                .readerFor(ProductCreationDTO.class)
-                .with(schema)
-                .readValues(myReader);
+        MappingIterator<ProductCreationDTO> iterator = null;
+        try {
+            iterator = mapper
+                    .readerFor(ProductCreationDTO.class)
+                    .with(schema)
+                    .readValues(myReader);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        return productRepository.saveAll(iterator.readAll()
-                .stream()
-                .map(productMapper::toProduct)
-                .collect(toList()));
+        try {
+            return productRepository.saveAll(iterator.readAll()
+                    .stream()
+                    .map(productMapper::toProduct)
+                    .collect(toList()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

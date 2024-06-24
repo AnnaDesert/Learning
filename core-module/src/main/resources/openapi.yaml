@@ -23,6 +23,11 @@ tags:
     description: Запросы для product_catalog
   - name: user
     description: Запросы для user
+  - name: auth
+    description: Запросы для authentication
+  - name: dynamics
+    description: Запросы для PriceDynamics
+    
 paths:
   /user:
     get:
@@ -438,7 +443,44 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductDTO'
-                  
+  /product/category/{category}:
+    get:
+      tags:
+        - product
+      summary: Получить товар по категории
+      description: Получить товар по категории
+      operationId: getProductByCategory
+      parameters:
+        - name: category
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductDTO'
+  /product/{fileName}:
+    post:
+      tags:
+        - product
+      summary: Добавить товары из csv файла
+      description: Добавить товары из csv файла
+      operationId: addProductFromCSV
+      parameters:
+        - name: fileName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
   /category:
     get:
       tags:
@@ -645,7 +687,31 @@ paths:
         required: true
       responses:
         '200':
-          description: OK        
+          description: OK     
+  /catalog/compareByPrice/{id}:
+    get:
+      tags:
+        - catalog
+      summary: Сравнить цены
+      description: Сравнить цены
+      operationId: comparePrices
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductCatalogDTO'
           
   /batch:
     get:
@@ -740,7 +806,93 @@ paths:
       responses:
         '200':
           description: OK
-          
+  /batch/productCategory/{productCategory}:
+    get:
+      tags:
+        - batch
+      summary: Получить партии по категории
+      description: Получить партии по категории
+      operationId: getBatchByProductCategory
+      parameters:
+        - name: productCategory
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BatchOfProductDTO'
+                  
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Зарегистрировать пользователя
+      description: Зарегистрировать пользователя
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreationDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponseDTO'
+  /auth/authenticate:
+    post:
+      tags:
+        - auth
+      summary: Аутентифицирвать пользователя
+      description: Аутентифицирвать пользователя
+      operationId: authenticate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequestDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponseDTO'
+                  
+  /dynamics:
+    post:
+      tags:
+        - dynamics
+      summary: Получить динамику цен
+      description: Получить динамику цен
+      operationId: getPriceDynamics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceDynamicsRequestDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PriceDynamicsResponseDTO'
+                  
 components:
   schemas:
     UserCreationDTO:
@@ -783,6 +935,71 @@ components:
         idAdmin:
           type: integer
           format: int64
+    PriceDynamicsRequestDTO:
+      required:
+        - dateStart
+        - dateEnd
+        - idShop
+        - idBatch
+      type: object
+      properties:
+        dateStart:
+          type: string
+          format: date-time
+        dateEnd:
+          type: string
+          format: date-time
+        idShop:
+          type: integer
+          format: int64
+        idBatch:
+          type: integer
+          format: int64
+    ChangePasswordRequestDTO:
+      required:
+        - currentPassword
+        - newPassword
+        - confirmationPassword
+      type: object
+      properties:
+        currentPassword:
+          type: string
+        newPassword:
+          type: string
+        confirmationPassword:
+          type: string
+    PriceDynamicsResponseDTO:
+      required:
+        - date
+        - price
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        price:
+          type: number
+          format: float
+    AuthenticationResponseDTO:
+      required:
+        - accessToken
+        - refreshToken
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+    AuthenticationRequestDTO:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
     ProductCreationDTO:
       required:
         - name

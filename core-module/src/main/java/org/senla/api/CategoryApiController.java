@@ -1,87 +1,92 @@
 package org.senla.api;
 
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.senla.model.ProductCategory;
-import org.senla.model.dto.ProductCategoryCreationDTO;
-import org.senla.model.dto.ProductCategoryDTO;
+import org.senla.model.mapper.ProductCategoryListMapper;
+import org.senla.swagger.model.ProductCategoryCreationDTO;
+import org.senla.swagger.model.ProductCategoryDTO;
 import org.senla.model.mapper.ProductCategoryMapper;
 import org.senla.service.ProductCategoryService;
-import org.senla.service.impl.ProductCategoryServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.senla.swagger.api.CategoryApi;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
 @RestController
 @Validated
 @RequestMapping("/api/v1")
 @Tag(name = "category", description = "Запросы для product_category")
 @RequiredArgsConstructor
-public class CategoryApiController {
+public class CategoryApiController implements CategoryApi {
     private final ProductCategoryService productCategoryService;
     private final ProductCategoryMapper productCategoryMapper;
+    private final ProductCategoryListMapper productCategoryListMapper;
 
-    @PostMapping("/category")
+    @Override
+    public Optional<ObjectMapper> getObjectMapper() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<HttpServletRequest> getRequest() {
+        return Optional.empty();
+    }
+
+    //    @PostMapping("/category")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addCategory(@RequestBody ProductCategoryCreationDTO productCategoryDTO) {
+    @Override
+    public ResponseEntity<Void> addCategory(@RequestBody ProductCategoryCreationDTO productCategoryDTO) {
         ProductCategory productCategory = productCategoryMapper.toProductCategory(productCategoryDTO);
         productCategoryService.save(productCategory);
+        return null;
+    }
+    
+//    @GetMapping("/category")
+    @Override
+    public ResponseEntity<List<ProductCategoryDTO>> allCategory() {
+        return ResponseEntity.ok(productCategoryListMapper.toDtoList(productCategoryService.getAll()));
     }
 
+//    @GetMapping("/category/{id}")
+    public ResponseEntity<ProductCategoryDTO> getCategoryById(@PathVariable @Min(1) Long id) {
+        return ResponseEntity.ok(productCategoryMapper.toDto(productCategoryService.getById(id).get()));
+    }
     
-    @GetMapping("/category")
-    public List<ProductCategoryDTO> allCategory() {
-        return productCategoryService.getAll()
-
-                .stream()
-
-                .map(productCategoryMapper::toDto)
-
-                .collect(toList());
+//    @GetMapping("/category/name/{name}")
+    @Override
+    public ResponseEntity<ProductCategoryDTO> getCategoryByName(@PathVariable String name) {
+        return ResponseEntity.ok(productCategoryMapper.toDto(productCategoryService.getByName(name).get()));
     }
 
-    
-    @GetMapping("/category/{id}")
-    public Optional<ProductCategoryDTO> getCategoryById(@PathVariable @Min(1) Long id) {
-        return productCategoryService.getById(id).map(productCategoryMapper::toDto);
-    }
-
-    
-    @GetMapping("/category/name/{name}")
-    public Optional<ProductCategoryDTO> getCategoryByName(@PathVariable String name) {
-        return productCategoryService.getByName(name).map(productCategoryMapper::toDto);
-    }
-
-    
-    @DeleteMapping("/category/{id}")
+//    @DeleteMapping("/category/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void removeCategoryById(@PathVariable @Min(1) Long id) {
+    @Override
+    public ResponseEntity<Void> removeCategoryById(@PathVariable @Min(1) Long id) {
         productCategoryService.remove(id);
+        return null;
     }
-
     
-    @PatchMapping("/category/{id}")
+//    @PatchMapping("/category/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateCategory(
-            @RequestBody ProductCategoryCreationDTO productCategoryDTO,
-            @PathVariable @Min(1) Long id) {
+    @Override
+    public ResponseEntity<Void> updateCategory(
+            @PathVariable @Min(1) Long id,
+            @RequestBody ProductCategoryCreationDTO productCategoryDTO
+    ) {
         ProductCategory productCategory = productCategoryMapper.toProductCategory(productCategoryDTO);
         productCategoryService.update(productCategory, id);
+        return null;
     }
 }
